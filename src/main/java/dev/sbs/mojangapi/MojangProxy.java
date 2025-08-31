@@ -1,18 +1,18 @@
 package dev.sbs.minecraftapi.client.mojang;
 
+import dev.sbs.api.collection.concurrent.Concurrent;
+import dev.sbs.api.collection.concurrent.ConcurrentList;
+import dev.sbs.api.util.PrimitiveUtil;
+import dev.sbs.api.util.StringUtil;
 import dev.sbs.minecraftapi.client.mojang.client.MinecraftServicesClient;
 import dev.sbs.minecraftapi.client.mojang.client.MojangApiClient;
 import dev.sbs.minecraftapi.client.mojang.client.MojangClient;
 import dev.sbs.minecraftapi.client.mojang.client.MojangSessionClient;
 import dev.sbs.minecraftapi.client.mojang.exception.MojangApiException;
+import dev.sbs.minecraftapi.client.mojang.profile.MojangProfile;
 import dev.sbs.minecraftapi.client.mojang.request.MinecraftServicesRequest;
 import dev.sbs.minecraftapi.client.mojang.request.MojangApiRequest;
 import dev.sbs.minecraftapi.client.mojang.request.MojangSessionRequest;
-import dev.sbs.minecraftapi.client.sbs.response.MojangProfileResponse;
-import dev.sbs.api.collection.concurrent.Concurrent;
-import dev.sbs.api.collection.concurrent.ConcurrentList;
-import dev.sbs.api.util.PrimitiveUtil;
-import dev.sbs.api.util.StringUtil;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.jetbrains.annotations.NotNull;
@@ -63,21 +63,21 @@ public final class MojangProxy {
     }
 
     /**
-     * Gets the {@link MojangProfileResponse} for the given username.
+     * Gets the {@link MojangProfile} for the given username.
      *
      * @param username Unique profile username (case-insensitive).
      */
-    public @NotNull MojangProfileResponse getMojangProfile(@NotNull String username) throws MojangApiException {
+    public @NotNull MojangProfile getMojangProfile(@NotNull String username) throws MojangApiException {
         return this.getMojangProfile(this.getApiRequest().getUniqueId(username).getUniqueId());
     }
 
     /**
-     * Gets the {@link MojangProfileResponse} for the given unique id.
+     * Gets the {@link MojangProfile} for the given unique id.
      *
      * @param uniqueId Unique profile identifier.
      */
-    public @NotNull MojangProfileResponse getMojangProfile(@NotNull UUID uniqueId) throws MojangApiException {
-        return new MojangProfileResponse(this.getSessionRequest().getProperties(uniqueId));
+    public @NotNull MojangProfile getMojangProfile(@NotNull UUID uniqueId) throws MojangApiException {
+        return new MojangProfile(this.getSessionRequest().getProperties(uniqueId));
     }
 
     /**
