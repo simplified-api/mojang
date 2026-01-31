@@ -85,7 +85,7 @@ public final class MojangProxy {
      * <p>
      * This method uses the existing IPv6 network prefix provided by {@link #getInet6NetworkPrefix()}
      * to construct a full IPv6 address. Random values are filled into any remaining groups
-     * to complete the address. The final address is validated and returned as an {@link Optional}.
+     * to complete the address. The final address is validated and returned as an {@link Inet6Address Optional&lt;Inet6Address>}.
      * <p>
      * If the network prefix is not available, an empty {@link Optional} is returned.
      *
@@ -164,23 +164,63 @@ public final class MojangProxy {
     /**
      * Set your assigned IPv6 network prefix to cycle through for web requests.
      * <br><br>
-     * Enable non-local IPv6 binding (as root)
-     * <pre><code>
-     * sysctl net.ipv6.ip_nonlocal_bind = 1
-     * echo "net.ipv6.ip_nonlocal_bind=1" >> /etc/sysctl.d/99-sysctl.conf
-     * </code></pre>
-     * <br>
-     * Create Hurricane Electric IPv6 Tunnel (as root)
+     * <h5>Create Hurricane Election IPv6 Tunnel</h5>
+     * <ol>
+     *     <li>Go to <a href="https://tunnelbroker.net/">TunnelBroker</a></li>
+     *     <li>Create an account or login</li>
+     *     <li>Click on Create Regular Tunnel</li>
+     *     <ul>
+     *         <li>Enter ipv4 address of your server</li>
+     *         <ul>
+     *             <li>If it gives an error, use the pingable IP of nginx.com</li>
+     *         </ul>
+     *         <li>Select an origin city for your tunnel</li>
+     *         <li>Click Create</li>
+     *     </ul>
+     *     <li>Click on your tunnel name</li>
+     *     <ul>
+     *         <li>If you entered the nginx.com IP, change it to the ipv4 address of your server</li>
+     *     </ul>
+     *     <li>Click on Generate /48</li>
+     * </ol>
+     *
+     * <h5>Create Server IPv6 Tunnel (Requires Root Access)</h5>
      * <pre><code>
      * modprobe ipv6
      * modprobe sit
      * ip tunnel add he-ipv6 mode sit remote SERVER_IPV4_ADDRESS local CLIENT_IPV4_ADDRESS ttl 255
      * ip link set he-ipv6 up
-     * ip addr add ROUTED_48 dev he-ipv6
-     * ip route del ::/0
-     * ip route add ::/0 dev he-ipv6
-     * ip -6 route add local ROUTED_48 dev lo
-     * ip -f inet6 addr
+     * ip link set he-ipv6 mtu 1480
+     * </code></pre>
+     *
+     * <h5>Setup Routing</h5>
+     * <pre><code>
+     * ip addr add ROUTED_48::2/48 dev he-ipv6
+     * ip -6 route add local ROUTED_48::/48 dev lo
+     * echo "100 he" >> /etc/iproute2/rt_tables
+     * ip -6 route add default dev he-ipv6 table he
+     * ip -6 rule add pref 1000 from ROUTED_48::/48 lookup he
+     * </code></pre>
+     *
+     * <h5>Enable Non-Local IPv6 Binding</h5>
+     * <pre><code>
+     * echo "net.ipv6.ip_nonlocal_bind = 1" > /etc/sysctl.d/99-nonlocal-bind.conf
+     * sysctl -p /etc/sysctl.d/99-nonlocal-bind.conf
+     * </code></pre>
+     *
+     * <h5>Enable IPv6 Forwarding</h5>
+     * <pre><code>
+     * echo "net.ipv6.conf.all.forwarding = 1" > /etc/sysctl.d/99-ipv6-forwarding.conf
+     * sysctl -p /etc/sysctl.d/99-ipv6-forwarding.conf
+     * </code></pre>
+     *
+     * <h5>Enable TCP Optimizations</h5>
+     * <pre><code>
+     * echo "net.ipv4.tcp_fastopen = 3" >> /etc/sysctl.d/99-tcp-optimizations.conf
+     * echo "net.core.default_qdisc = fq" >> /etc/sysctl.d/99-tcp-optimizations.conf
+     * echo "net.ipv4.tcp_congestion_control = bbr" >> /etc/sysctl.d/99-tcp-optimizations.conf
+     * echo "net.ipv4.tcp_slow_start_after_idle = 0" >> /etc/sysctl.d/99-tcp-optimizations.conf
+     * sysctl -p /etc/sysctl.d/99-tcp-optimizations.conf
      * </code></pre>
      *
      * @param networkPrefix Your IPv6 Network Prefix
