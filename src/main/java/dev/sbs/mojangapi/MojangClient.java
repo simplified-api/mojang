@@ -1,11 +1,13 @@
-package dev.sbs.minecraftapi.client.mojang.client;
+package dev.sbs.minecraftapi.client.mojang;
 
 import dev.sbs.api.client.Client;
-import dev.sbs.minecraftapi.client.mojang.exception.MojangApiException;
-import dev.sbs.minecraftapi.client.mojang.request.IMojangRequest;
+import dev.sbs.api.client.exception.ApiErrorDecoder;
 import dev.sbs.api.client.response.CFCacheStatus;
 import dev.sbs.api.collection.concurrent.Concurrent;
+import dev.sbs.api.collection.concurrent.ConcurrentSet;
 import dev.sbs.api.reflection.Reflection;
+import dev.sbs.minecraftapi.client.mojang.exception.MojangApiException;
+import dev.sbs.minecraftapi.client.mojang.request.IMojangRequest;
 import feign.FeignException;
 import lombok.Getter;
 import lombok.SneakyThrows;
@@ -32,10 +34,18 @@ public abstract class MojangClient<T extends IMojangRequest> extends Client<T> {
         super(domain.getHost().getHost(), inet6Address);
         this.domain = domain;
         this.request = this.build(Reflection.getSuperClass(this));
-        super.setCachedResponseHeaders(Concurrent.newUnmodifiableSet(CFCacheStatus.HEADER_KEY));
-        super.setErrorDecoder((methodKey, response) -> {
+    }
+
+    @Override
+    protected @NotNull ApiErrorDecoder configureErrorDecoder() {
+        return (methodKey, response) -> {
             throw new MojangApiException(FeignException.errorStatus(methodKey, response));
-        });
+        };
+    }
+
+    @Override
+    protected @NotNull ConcurrentSet<String> configureResponseHeaders() {
+        return Concurrent.newUnmodifiableSet(CFCacheStatus.HEADER_KEY);
     }
 
     public boolean isRateLimited() {

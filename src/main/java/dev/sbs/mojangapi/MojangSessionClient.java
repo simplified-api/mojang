@@ -1,4 +1,4 @@
-package dev.sbs.minecraftapi.client.mojang.client;
+package dev.sbs.minecraftapi.client.mojang;
 
 import dev.sbs.minecraftapi.client.mojang.request.MojangSessionRequest;
 import org.jetbrains.annotations.NotNull;
