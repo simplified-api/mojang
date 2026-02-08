@@ -7,7 +7,7 @@ import dev.sbs.api.collection.concurrent.Concurrent;
 import dev.sbs.api.collection.concurrent.ConcurrentSet;
 import dev.sbs.api.reflection.Reflection;
 import dev.sbs.minecraftapi.client.mojang.exception.MojangApiException;
-import dev.sbs.minecraftapi.client.mojang.request.IMojangRequest;
+import dev.sbs.minecraftapi.client.mojang.request.MojangRequest;
 import feign.FeignException;
 import lombok.Getter;
 import lombok.SneakyThrows;
@@ -21,7 +21,7 @@ import java.time.temporal.ChronoUnit;
 import java.util.Optional;
 
 @Getter
-public abstract class MojangClient<T extends IMojangRequest> extends Client<T> {
+public abstract class MojangClient<T extends MojangRequest> extends Client<T> {
 
     private final @NotNull Domain domain;
     private final @NotNull T request;

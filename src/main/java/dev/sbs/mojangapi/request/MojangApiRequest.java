@@ -12,7 +12,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.Collection;
 
-public interface MojangApiRequest extends IMojangRequest {
+public interface MojangApiRequest extends MojangRequest {
 
     default @NotNull MojangMultiUsernameResponse getMultipleUniqueIds(@NotNull Collection<String> usernames) throws MojangApiException {
         return this.getMultipleUniqueIds(usernames.toArray(new String[] { }));
