@@ -25,7 +25,7 @@ import java.nio.charset.StandardCharsets;
  *
  * @see <a href="https://github.com/lucaazalim/minecraft-server-ping">https://github.com/lucaazalim/minecraft-server-ping</a>
  */
-public final class MinecraftServerRequest implements MojangRequest {
+public final class MinecraftServerPing {
 
     public static final byte PACKET_HANDSHAKE = 0x00;
     public static final byte PACKET_STATUSREQUEST = 0x00;

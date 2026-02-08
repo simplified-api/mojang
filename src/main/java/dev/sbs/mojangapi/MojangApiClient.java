@@ -1,13 +1,13 @@
 package dev.sbs.minecraftapi.client.mojang;
 
-import dev.sbs.minecraftapi.client.mojang.request.MojangApiRequest;
+import dev.sbs.minecraftapi.client.mojang.request.MojangApiEndpoints;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.net.Inet6Address;
 import java.util.Optional;
 
-public class MojangApiClient extends MojangClient<MojangApiRequest> {
+public class MojangApiClient extends MojangClient<MojangApiEndpoints> {
 
     public MojangApiClient() {
         this(Optional.empty());

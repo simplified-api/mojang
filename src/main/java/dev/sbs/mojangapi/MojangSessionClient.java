@@ -1,13 +1,13 @@
 package dev.sbs.minecraftapi.client.mojang;
 
-import dev.sbs.minecraftapi.client.mojang.request.MojangSessionRequest;
+import dev.sbs.minecraftapi.client.mojang.request.MojangSessionEndpoints;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.net.Inet6Address;
 import java.util.Optional;
 
-public class MojangSessionClient extends MojangClient<MojangSessionRequest> {
+public class MojangSessionClient extends MojangClient<MojangSessionEndpoints> {
 
     public MojangSessionClient() {
         this(Optional.empty());

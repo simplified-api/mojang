@@ -1,13 +1,13 @@
 package dev.sbs.minecraftapi.client.mojang;
 
-import dev.sbs.minecraftapi.client.mojang.request.MinecraftServicesRequest;
+import dev.sbs.minecraftapi.client.mojang.request.MinecraftServicesEndpoints;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.net.Inet6Address;
 import java.util.Optional;
 
-public class MinecraftServicesClient extends MojangClient<MinecraftServicesRequest> {
+public class MinecraftServicesClient extends MojangClient<MinecraftServicesEndpoints> {
 
     public MinecraftServicesClient() {
         this(Optional.empty());

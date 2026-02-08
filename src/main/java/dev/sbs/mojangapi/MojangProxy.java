@@ -6,9 +6,9 @@ import dev.sbs.api.util.PrimitiveUtil;
 import dev.sbs.api.util.StringUtil;
 import dev.sbs.minecraftapi.client.mojang.exception.MojangApiException;
 import dev.sbs.minecraftapi.client.mojang.profile.MojangProfile;
-import dev.sbs.minecraftapi.client.mojang.request.MinecraftServicesRequest;
-import dev.sbs.minecraftapi.client.mojang.request.MojangApiRequest;
-import dev.sbs.minecraftapi.client.mojang.request.MojangSessionRequest;
+import dev.sbs.minecraftapi.client.mojang.request.MinecraftServicesEndpoints;
+import dev.sbs.minecraftapi.client.mojang.request.MojangApiEndpoints;
+import dev.sbs.minecraftapi.client.mojang.request.MojangSessionEndpoints;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.jetbrains.annotations.NotNull;
@@ -54,8 +54,8 @@ public final class MojangProxy {
             .orElse(this.apiClients.get(0));
     }
 
-    public @NotNull MojangApiRequest getApiRequest() {
-        return this.getApiClient().getRequest();
+    public @NotNull MojangApiEndpoints getApiRequest() {
+        return this.getApiClient().getEndpoints();
     }
 
     /**
@@ -149,12 +149,12 @@ public final class MojangProxy {
             .orElse(this.sessionClients.get(0));
     }
 
-    public @NotNull MinecraftServicesRequest getServicesRequest() {
-        return this.getServicesClient().getRequest();
+    public @NotNull MinecraftServicesEndpoints getServicesRequest() {
+        return this.getServicesClient().getEndpoints();
     }
 
-    public @NotNull MojangSessionRequest getSessionRequest() {
-        return this.getSessionClient().getRequest();
+    public @NotNull MojangSessionEndpoints getSessionRequest() {
+        return this.getSessionClient().getEndpoints();
     }
 
     /**

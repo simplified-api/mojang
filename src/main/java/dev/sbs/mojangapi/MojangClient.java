@@ -5,9 +5,8 @@ import dev.sbs.api.client.exception.ApiErrorDecoder;
 import dev.sbs.api.client.response.CFCacheStatus;
 import dev.sbs.api.collection.concurrent.Concurrent;
 import dev.sbs.api.collection.concurrent.ConcurrentSet;
-import dev.sbs.api.reflection.Reflection;
 import dev.sbs.minecraftapi.client.mojang.exception.MojangApiException;
-import dev.sbs.minecraftapi.client.mojang.request.MojangRequest;
+import dev.sbs.minecraftapi.client.mojang.request.MojangEndpoints;
 import feign.FeignException;
 import lombok.Getter;
 import lombok.SneakyThrows;
@@ -21,10 +20,9 @@ import java.time.temporal.ChronoUnit;
 import java.util.Optional;
 
 @Getter
-public abstract class MojangClient<T extends MojangRequest> extends Client<T> {
+public abstract class MojangClient<T extends MojangEndpoints> extends Client<T> {
 
     private final @NotNull Domain domain;
-    private final @NotNull T request;
 
     public MojangClient(@NotNull Domain domain, @Nullable Inet6Address inet6Address) {
         this(domain, Optional.ofNullable(inet6Address));
@@ -33,7 +31,6 @@ public abstract class MojangClient<T extends MojangRequest> extends Client<T> {
     public MojangClient(@NotNull Domain domain, @NotNull Optional<Inet6Address> inet6Address) {
         super(domain.getHost().getHost(), inet6Address);
         this.domain = domain;
-        this.request = this.build(Reflection.getSuperClass(this));
     }
 
     @Override
