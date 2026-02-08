@@ -1,7 +1,7 @@
 package dev.sbs.minecraftapi.client.mojang.request;
 
-import dev.sbs.api.client.request.IRequest;
+import dev.sbs.api.client.request.FeignRequest;
 
-public interface IMojangRequest extends IRequest {
+public interface IMojangRequest extends FeignRequest {
 
 }
