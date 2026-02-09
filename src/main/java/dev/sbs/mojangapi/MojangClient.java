@@ -2,9 +2,6 @@ package dev.sbs.minecraftapi.client.mojang;
 
 import dev.sbs.api.client.Client;
 import dev.sbs.api.client.exception.ClientErrorDecoder;
-import dev.sbs.api.client.response.CFCacheStatus;
-import dev.sbs.api.collection.concurrent.Concurrent;
-import dev.sbs.api.collection.concurrent.ConcurrentSet;
 import dev.sbs.minecraftapi.client.mojang.exception.MojangClientException;
 import dev.sbs.minecraftapi.client.mojang.request.MojangEndpoints;
 import lombok.Getter;
@@ -37,11 +34,6 @@ public abstract class MojangClient<T extends MojangEndpoints> extends Client<T> 
         return (methodKey, response) -> {
             throw new MojangClientException(methodKey, response);
         };
-    }
-
-    @Override
-    protected @NotNull ConcurrentSet<String> configureResponseHeaders() {
-        return Concurrent.newUnmodifiableSet(CFCacheStatus.HEADER_KEY);
     }
 
     public boolean isRateLimited() {
