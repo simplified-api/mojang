@@ -4,7 +4,7 @@ import dev.sbs.api.collection.concurrent.Concurrent;
 import dev.sbs.api.collection.concurrent.ConcurrentList;
 import dev.sbs.api.util.PrimitiveUtil;
 import dev.sbs.api.util.StringUtil;
-import dev.sbs.minecraftapi.client.mojang.exception.MojangApiException;
+import dev.sbs.minecraftapi.client.mojang.exception.MojangClientException;
 import dev.sbs.minecraftapi.client.mojang.profile.MojangProfile;
 import dev.sbs.minecraftapi.client.mojang.request.MinecraftServicesEndpoints;
 import dev.sbs.minecraftapi.client.mojang.request.MojangApiEndpoints;
@@ -63,7 +63,7 @@ public final class MojangProxy {
      *
      * @param username Unique profile username (case-insensitive).
      */
-    public @NotNull MojangProfile getMojangProfile(@NotNull String username) throws MojangApiException {
+    public @NotNull MojangProfile getMojangProfile(@NotNull String username) throws MojangClientException {
         return this.getMojangProfile(this.getApiRequest().getUniqueId(username).getUniqueId());
     }
 
@@ -72,7 +72,7 @@ public final class MojangProxy {
      *
      * @param uniqueId Unique profile identifier.
      */
-    public @NotNull MojangProfile getMojangProfile(@NotNull UUID uniqueId) throws MojangApiException {
+    public @NotNull MojangProfile getMojangProfile(@NotNull UUID uniqueId) throws MojangClientException {
         return new MojangProfile(this.getSessionRequest().getProperties(uniqueId));
     }
 

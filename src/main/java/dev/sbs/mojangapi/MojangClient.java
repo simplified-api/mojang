@@ -1,13 +1,12 @@
 package dev.sbs.minecraftapi.client.mojang;
 
 import dev.sbs.api.client.Client;
-import dev.sbs.api.client.exception.ApiErrorDecoder;
+import dev.sbs.api.client.exception.ClientErrorDecoder;
 import dev.sbs.api.client.response.CFCacheStatus;
 import dev.sbs.api.collection.concurrent.Concurrent;
 import dev.sbs.api.collection.concurrent.ConcurrentSet;
-import dev.sbs.minecraftapi.client.mojang.exception.MojangApiException;
+import dev.sbs.minecraftapi.client.mojang.exception.MojangClientException;
 import dev.sbs.minecraftapi.client.mojang.request.MojangEndpoints;
-import feign.FeignException;
 import lombok.Getter;
 import lombok.SneakyThrows;
 import org.jetbrains.annotations.NotNull;
@@ -34,9 +33,9 @@ public abstract class MojangClient<T extends MojangEndpoints> extends Client<T> 
     }
 
     @Override
-    protected @NotNull ApiErrorDecoder configureErrorDecoder() {
+    protected @NotNull ClientErrorDecoder configureErrorDecoder() {
         return (methodKey, response) -> {
-            throw new MojangApiException(FeignException.errorStatus(methodKey, response));
+            throw new MojangClientException(methodKey, response);
         };
     }
 
