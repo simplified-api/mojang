@@ -1,14 +1,14 @@
 package dev.sbs.minecraftapi.client.mojang.exception;
 
 import com.google.gson.annotations.SerializedName;
-import dev.sbs.api.client.exception.ClientErrorResponse;
+import dev.sbs.api.client.exception.ApiErrorResponse;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
-public class MojangErrorResponse implements ClientErrorResponse {
+public class MojangErrorResponse implements ApiErrorResponse {
 
     @SerializedName("error")
     protected String type;

@@ -2,7 +2,7 @@ package dev.sbs.minecraftapi.client.mojang;
 
 import dev.sbs.api.client.Client;
 import dev.sbs.api.client.exception.ClientErrorDecoder;
-import dev.sbs.minecraftapi.client.mojang.exception.MojangClientException;
+import dev.sbs.minecraftapi.client.mojang.exception.MojangApiException;
 import dev.sbs.minecraftapi.client.mojang.request.MojangEndpoints;
 import lombok.Getter;
 import lombok.SneakyThrows;
@@ -32,7 +32,7 @@ public abstract class MojangClient<T extends MojangEndpoints> extends Client<T> 
     @Override
     protected @NotNull ClientErrorDecoder configureErrorDecoder() {
         return (methodKey, response) -> {
-            throw new MojangClientException(methodKey, response);
+            throw new MojangApiException(methodKey, response);
         };
     }
 
