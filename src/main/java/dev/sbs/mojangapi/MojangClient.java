@@ -1,7 +1,7 @@
 package dev.sbs.minecraftapi.client.mojang;
 
 import dev.sbs.api.client.Client;
-import dev.sbs.api.client.exception.ClientErrorDecoder;
+import dev.sbs.api.client.decoder.ClientErrorDecoder;
 import dev.sbs.minecraftapi.client.mojang.exception.MojangApiException;
 import dev.sbs.minecraftapi.client.mojang.request.MojangEndpoints;
 import lombok.Getter;
