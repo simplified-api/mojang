@@ -2,31 +2,30 @@ package dev.sbs.minecraftapi.client.mojang;
 
 import dev.sbs.api.client.Client;
 import dev.sbs.api.client.decoder.ClientErrorDecoder;
+import dev.sbs.api.client.ratelimit.RateLimit;
+import dev.sbs.api.client.route.DynamicRouteProvider;
 import dev.sbs.minecraftapi.client.mojang.exception.MojangApiException;
 import dev.sbs.minecraftapi.client.mojang.request.MojangEndpoints;
 import lombok.Getter;
-import lombok.SneakyThrows;
+import lombok.NoArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.net.Inet6Address;
-import java.net.URL;
-import java.time.Duration;
 import java.time.temporal.ChronoUnit;
 import java.util.Optional;
 
 @Getter
-public abstract class MojangClient<T extends MojangEndpoints> extends Client<T> {
+@NoArgsConstructor
+public final class MojangClient extends Client<MojangEndpoints> {
 
-    private final @NotNull Domain domain;
-
-    public MojangClient(@NotNull Domain domain, @Nullable Inet6Address inet6Address) {
-        this(domain, Optional.ofNullable(inet6Address));
+    public MojangClient(@Nullable Inet6Address inet6Address) {
+        this(Optional.ofNullable(inet6Address));
     }
 
-    public MojangClient(@NotNull Domain domain, @NotNull Optional<Inet6Address> inet6Address) {
-        super(domain.getHost().getHost(), inet6Address);
-        this.domain = domain;
+    public MojangClient(@NotNull Optional<Inet6Address> inet6Address) {
+        super(inet6Address);
     }
 
     @Override
@@ -36,19 +35,17 @@ public abstract class MojangClient<T extends MojangEndpoints> extends Client<T> 
         };
     }
 
-    public boolean isRateLimited() {
-        return this.getRecentResponses()
-            .stream()
-            .filter(response -> response.getTimestamp().toEpochMilli() >= System.currentTimeMillis() - this.getDomain().getRateLimit().getDurationMillis())
-            .count() >= this.getDomain().getRateLimit().getAllowed();
+    public boolean isRateLimited(@NotNull Domain domain) {
+        return super.isRateLimited(domain.getBucketId());
     }
     
-    public boolean notRateLimited() {
-        return !this.isRateLimited();
+    public boolean notRateLimited(@NotNull Domain domain) {
+        return !this.isRateLimited(domain);
     }
 
     @Getter
-    public enum Domain {
+    @RequiredArgsConstructor
+    public enum Domain implements DynamicRouteProvider {
 
         MOJANG("mojang.com"),
         MOJANG_ACCOUNT("account.mojang.com"),
@@ -57,7 +54,7 @@ public abstract class MojangClient<T extends MojangEndpoints> extends Client<T> 
         MOJANG_AUTHSERVER("authserver.mojang.com"),
         MOJANG_SESSIONSERVER(
             "sessionserver.mojang.com",
-            new RateLimit(200, 10, 1, ChronoUnit.MINUTES)
+            new RateLimit(200, 1, ChronoUnit.MINUTES)
         ),
         MINECRAFT("minecraft.net"),
         MINECRAFT_SERVICES("api.minecraftservices.com"),
@@ -65,47 +62,11 @@ public abstract class MojangClient<T extends MojangEndpoints> extends Client<T> 
         MINECRAFT_SKINS("skins.minecraft.net"),
         MINECRAFT_TEXTURES("textures.minecraft.net");
 
-        private final @NotNull URL host;
+        private final @NotNull String route;
         private final @NotNull RateLimit rateLimit;
 
-        Domain(@NotNull String host) {
-            this(host, new RateLimit(600, 10, 10, ChronoUnit.MINUTES));
-        }
-
-        Domain(@NotNull String host, @NotNull RateLimit rateLimit) {
-            this.host = getUrl(host);
-            this.rateLimit = rateLimit;
-        }
-
-        @SneakyThrows
-        public static @NotNull URL getUrl(@NotNull String host) {
-            if (!host.startsWith("https://") && !host.startsWith("http://"))
-                host = String.format("https://%s", host);
-
-            return new URL(host);
-        }
-
-    }
-
-    @Getter
-    public static class RateLimit {
-
-        private final long maximum;
-        private final int bufferPercentage;
-        private final long allowed;
-        private final long howLong;
-        private final @NotNull ChronoUnit unit;
-        private final @NotNull Duration duration;
-        private long durationMillis;
-
-        public RateLimit(long maximum, int bufferPercentage, long howLong, @NotNull ChronoUnit unit) {
-            this.maximum = maximum;
-            this.bufferPercentage = bufferPercentage;
-            this.allowed = this.maximum - (this.maximum * (this.bufferPercentage / 100));
-            this.howLong = howLong;
-            this.unit = unit;
-            this.duration = Duration.of(this.howLong, this.unit);
-            this.durationMillis = this.duration.toMillis();
+        Domain(@NotNull String route) {
+            this(route, new RateLimit(600, 10, ChronoUnit.MINUTES));
         }
 
     }
