@@ -2,7 +2,6 @@ package dev.sbs.minecraftapi.client.mojang.request;
 
 import dev.sbs.api.client.request.Endpoints;
 import dev.sbs.api.client.request.expander.StringArrayQuoteExpander;
-import dev.sbs.api.client.route.Route;
 import dev.sbs.minecraftapi.client.mojang.MojangClient;
 import dev.sbs.minecraftapi.client.mojang.exception.MojangApiException;
 import dev.sbs.minecraftapi.client.mojang.response.MojangMultiUsernameResponse;
@@ -17,7 +16,7 @@ import org.jetbrains.annotations.NotNull;
 import java.util.Collection;
 import java.util.UUID;
 
-@Route("api.minecraftservices.com")
+@MojangDomain(MojangClient.Domain.MINECRAFT_SERVICES)
 public interface MojangEndpoints extends Endpoints {
 
     /**
