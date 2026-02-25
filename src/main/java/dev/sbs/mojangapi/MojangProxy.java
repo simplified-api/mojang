@@ -6,9 +6,7 @@ import dev.sbs.api.util.PrimitiveUtil;
 import dev.sbs.api.util.StringUtil;
 import dev.sbs.minecraftapi.client.mojang.exception.MojangApiException;
 import dev.sbs.minecraftapi.client.mojang.profile.MojangProfile;
-import dev.sbs.minecraftapi.client.mojang.request.MinecraftServicesEndpoints;
-import dev.sbs.minecraftapi.client.mojang.request.MojangApiEndpoints;
-import dev.sbs.minecraftapi.client.mojang.request.MojangSessionEndpoints;
+import dev.sbs.minecraftapi.client.mojang.request.MojangEndpoints;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.jetbrains.annotations.NotNull;
@@ -28,33 +26,31 @@ public final class MojangProxy {
     // https://visage.surgeplay.com/index.html
     // https://github.com/unascribed-archive/Visage
 
-    private final @NotNull ConcurrentList<MojangApiClient> apiClients = Concurrent.newList();
-    private final @NotNull ConcurrentList<MojangSessionClient> sessionClients = Concurrent.newList();
-    private final @NotNull ConcurrentList<MinecraftServicesClient> servicesClients = Concurrent.newList();
+    private final @NotNull ConcurrentList<MojangClient> clients = Concurrent.newList();
     @Getter private @NotNull Optional<Integer[]> inet6NetworkPrefix = Optional.empty();
 
     /**
-     * Retrieves an instance of {@link MojangApiClient} to handle API communication.
+     * Retrieves an instance of {@link MojangClient} to handle API communication.
      * <p>
      * This method ensures that there is always at least one default client present
      * and returns the first available client that is not rate-limited. If no such client exists,
      * a new client with a randomized IPv6 address is created and added to the clients pool.
      *
-     * @return An instance of {@link MojangApiClient}, prioritized to avoid rate limitations.
+     * @return An instance of {@link MojangClient}, prioritized to avoid rate limitations.
      */
-    public @NotNull MojangApiClient getApiClient() {
+    public @NotNull MojangClient getApiClient() {
         // Add Default Client
-        this.apiClients.addIf(this.apiClients::isEmpty, new MojangApiClient());
+        this.clients.addIf(this.clients::isEmpty, new MojangClient());
 
-        return this.apiClients.stream()
+        return this.clients.stream()
             .filter(MojangClient::notRateLimited)
             .findFirst()
-            .or(() -> Optional.of(new MojangApiClient(this.getRandomInet6Address())))
-            .filter(this.apiClients::add)
-            .orElse(this.apiClients.get(0));
+            .or(() -> Optional.of(new MojangClient(this.getRandomInet6Address())))
+            .filter(this.clients::add)
+            .orElse(this.clients.get(0));
     }
 
-    public @NotNull MojangApiEndpoints getApiRequest() {
+    public @NotNull MojangEndpoints getEndpoints() {
         return this.getApiClient().getEndpoints();
     }
 
@@ -64,7 +60,7 @@ public final class MojangProxy {
      * @param username Unique profile username (case-insensitive).
      */
     public @NotNull MojangProfile getMojangProfile(@NotNull String username) throws MojangApiException {
-        return this.getMojangProfile(this.getApiRequest().getUniqueId(username).getUniqueId());
+        return this.getMojangProfile(this.getEndpoints().getPlayer(username).getUniqueId());
     }
 
     /**
@@ -73,7 +69,7 @@ public final class MojangProxy {
      * @param uniqueId Unique profile identifier.
      */
     public @NotNull MojangProfile getMojangProfile(@NotNull UUID uniqueId) throws MojangApiException {
-        return new MojangProfile(this.getSessionRequest().getProperties(uniqueId));
+        return new MojangProfile(this.getEndpoints().getProperties(uniqueId));
     }
 
     /**
@@ -105,56 +101,6 @@ public final class MojangProxy {
 
     private static int getRandomInet6Group() {
         return ThreadLocalRandom.current().nextInt() & 0xFFFF;
-    }
-
-    /**
-     * Retrieves an instance of {@link MinecraftServicesClient} to handle API communication.
-     * <p>
-     * This method ensures that there is always at least one default client present
-     * and returns the first available client that is not rate-limited. If no such client exists,
-     * a new client with a randomized IPv6 address is created and added to the clients pool.
-     *
-     * @return An instance of {@link MinecraftServicesClient}, prioritized to avoid rate limitations.
-     */
-    public @NotNull MinecraftServicesClient getServicesClient() {
-        // Add Default Client
-        this.servicesClients.addIf(this.servicesClients::isEmpty, new MinecraftServicesClient());
-
-        return this.servicesClients.stream()
-            .filter(MojangClient::notRateLimited)
-            .findFirst()
-            .or(() -> Optional.of(new MinecraftServicesClient(this.getRandomInet6Address())))
-            .filter(this.servicesClients::add)
-            .orElse(this.servicesClients.get(0));
-    }
-
-    /**
-     * Retrieves an instance of {@link MojangSessionClient} to handle API communication.
-     * <p>
-     * This method ensures that there is always at least one default client present
-     * and returns the first available client that is not rate-limited. If no such client exists,
-     * a new client with a randomized IPv6 address is created and added to the clients pool.
-     *
-     * @return An instance of {@link MojangSessionClient}, prioritized to avoid rate limitations.
-     */
-    public @NotNull MojangSessionClient getSessionClient() {
-        // Add Default Client
-        this.sessionClients.addIf(this.sessionClients::isEmpty, new MojangSessionClient());
-
-        return this.sessionClients.stream()
-            .filter(MojangClient::notRateLimited)
-            .findFirst()
-            .or(() -> Optional.of(new MojangSessionClient(this.getRandomInet6Address())))
-            .filter(this.sessionClients::add)
-            .orElse(this.sessionClients.get(0));
-    }
-
-    public @NotNull MinecraftServicesEndpoints getServicesRequest() {
-        return this.getServicesClient().getEndpoints();
-    }
-
-    public @NotNull MojangSessionEndpoints getSessionRequest() {
-        return this.getSessionClient().getEndpoints();
     }
 
     /**
