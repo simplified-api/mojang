@@ -11,7 +11,7 @@ import lombok.NoArgsConstructor;
 public class MojangErrorResponse implements ApiErrorResponse {
 
     @SerializedName("error")
-    protected String type;
+    protected String id;
     @SerializedName("errorMessage")
     protected String reason;
     protected String path;
@@ -19,7 +19,7 @@ public class MojangErrorResponse implements ApiErrorResponse {
     public static class Unknown extends MojangErrorResponse {
 
         public Unknown() {
-            super.type = "UNKNOWN";
+            super.id = "UNKNOWN";
             super.reason = "Unknown Reason";
             super.path = "";
         }
