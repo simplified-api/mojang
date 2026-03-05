@@ -6,7 +6,7 @@ import dev.sbs.api.util.PrimitiveUtil;
 import dev.sbs.api.util.StringUtil;
 import dev.sbs.minecraftapi.client.mojang.exception.MojangApiException;
 import dev.sbs.minecraftapi.client.mojang.profile.MojangProfile;
-import dev.sbs.minecraftapi.client.mojang.request.MojangEndpoints;
+import dev.sbs.minecraftapi.client.mojang.request.MojangEndpoint;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.jetbrains.annotations.NotNull;
@@ -50,7 +50,7 @@ public final class MojangProxy {
             .orElse(this.clients.get(0));
     }
 
-    public @NotNull MojangEndpoints getEndpoints() {
+    public @NotNull MojangEndpoint getEndpoints() {
         return this.getApiClient().getEndpoints();
     }
 

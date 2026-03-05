@@ -1,6 +1,6 @@
 package dev.sbs.minecraftapi.client.mojang.request;
 
-import dev.sbs.api.client.request.Endpoints;
+import dev.sbs.api.client.request.Endpoint;
 import dev.sbs.api.client.request.expander.StringArrayQuoteExpander;
 import dev.sbs.minecraftapi.client.mojang.MojangClient;
 import dev.sbs.minecraftapi.client.mojang.exception.MojangApiException;
@@ -17,7 +17,7 @@ import java.util.Collection;
 import java.util.UUID;
 
 @MojangDomain(MojangClient.Domain.MINECRAFT_SERVICES)
-public interface MojangEndpoints extends Endpoints {
+public interface MojangEndpoint extends Endpoint {
 
     /**
      * Requests player information by username in bulk.

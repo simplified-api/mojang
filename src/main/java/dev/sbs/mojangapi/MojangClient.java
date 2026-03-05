@@ -5,7 +5,7 @@ import dev.sbs.api.client.decoder.ClientErrorDecoder;
 import dev.sbs.api.client.ratelimit.RateLimit;
 import dev.sbs.api.client.route.DynamicRouteProvider;
 import dev.sbs.minecraftapi.client.mojang.exception.MojangApiException;
-import dev.sbs.minecraftapi.client.mojang.request.MojangEndpoints;
+import dev.sbs.minecraftapi.client.mojang.request.MojangEndpoint;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
@@ -18,7 +18,7 @@ import java.util.Optional;
 
 @Getter
 @NoArgsConstructor
-public final class MojangClient extends Client<MojangEndpoints> {
+public final class MojangClient extends Client<MojangEndpoint> {
 
     public MojangClient(@Nullable Inet6Address inet6Address) {
         this(Optional.ofNullable(inet6Address));
