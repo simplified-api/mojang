@@ -18,9 +18,9 @@ import java.util.UUID;
 @NoArgsConstructor(access = AccessLevel.NONE)
 public class MojangProperty {
 
-    private String name;
+    private String name = "textures";
     @SerializedName("value")
-    private String raw;
+    private String raw = "";
     private @NotNull Optional<String> signature = Optional.empty();
 
     public @NotNull String getRawJson() {
