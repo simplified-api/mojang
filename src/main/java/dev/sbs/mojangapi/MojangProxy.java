@@ -43,7 +43,7 @@ public final class MojangProxy {
         this.clients.addIf(this.clients::isEmpty, new MojangClient());
 
         return this.clients.stream()
-            .filter(MojangClient::notRateLimited)
+            .filter(client -> client.notRateLimited(MojangClient.Domain.MINECRAFT_SERVICES))
             .findFirst()
             .or(() -> Optional.of(new MojangClient(this.getRandomInet6Address())))
             .filter(this.clients::add)
@@ -51,7 +51,7 @@ public final class MojangProxy {
     }
 
     public @NotNull MojangEndpoint getEndpoints() {
-        return this.getApiClient().getEndpoints();
+        return this.getApiClient().getEndpoint();
     }
 
     /**

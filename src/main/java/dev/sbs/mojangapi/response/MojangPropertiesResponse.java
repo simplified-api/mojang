@@ -21,7 +21,7 @@ public class MojangPropertiesResponse {
 
     public @NotNull MojangProperty getProperty() {
         return this.getProperties()
-            .getFirst()
+            .findFirst()
             .orElseThrow();
     }
 

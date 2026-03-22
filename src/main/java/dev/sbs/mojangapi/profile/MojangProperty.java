@@ -3,6 +3,7 @@ package dev.sbs.minecraftapi.client.mojang.profile;
 import com.google.gson.annotations.SerializedName;
 import dev.sbs.api.SimplifiedApi;
 import dev.sbs.api.io.gson.SerializedPath;
+import dev.sbs.api.persistence.type.GsonType;
 import dev.sbs.api.util.StringUtil;
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -15,6 +16,7 @@ import java.util.Optional;
 import java.util.UUID;
 
 @Getter
+@GsonType
 @NoArgsConstructor(access = AccessLevel.NONE)
 public class MojangProperty {
 
