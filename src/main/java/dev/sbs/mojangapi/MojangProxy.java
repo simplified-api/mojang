@@ -50,7 +50,7 @@ public final class MojangProxy {
             .orElse(this.clients.get(0));
     }
 
-    public @NotNull MojangEndpoint getEndpoints() {
+    public @NotNull MojangEndpoint getEndpoint() {
         return this.getApiClient().getEndpoint();
     }
 
@@ -60,7 +60,7 @@ public final class MojangProxy {
      * @param username Unique profile username (case-insensitive).
      */
     public @NotNull MojangProfile getMojangProfile(@NotNull String username) throws MojangApiException {
-        return this.getMojangProfile(this.getEndpoints().getPlayer(username).getUniqueId());
+        return this.getMojangProfile(this.getEndpoint().getPlayer(username).getUniqueId());
     }
 
     /**
@@ -69,7 +69,7 @@ public final class MojangProxy {
      * @param uniqueId Unique profile identifier.
      */
     public @NotNull MojangProfile getMojangProfile(@NotNull UUID uniqueId) throws MojangApiException {
-        return new MojangProfile(this.getEndpoints().getProperties(uniqueId));
+        return new MojangProfile(this.getEndpoint().getProperties(uniqueId));
     }
 
     /**
