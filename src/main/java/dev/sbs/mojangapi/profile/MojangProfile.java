@@ -3,7 +3,7 @@ package dev.sbs.minecraftapi.client.mojang.profile;
 import dev.sbs.api.collection.concurrent.Concurrent;
 import dev.sbs.api.collection.concurrent.ConcurrentList;
 import dev.sbs.api.util.StringUtil;
-import dev.sbs.minecraftapi.client.mojang.response.MojangPropertiesResponse;
+import dev.sbs.minecraftapi.client.mojang.response.MojangProperties;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -29,7 +29,7 @@ public class MojangProfile {
     private ConcurrentList<String> profileActions = Concurrent.newList();
     private Textures textures;
 
-    public MojangProfile(@NotNull MojangPropertiesResponse properties) {
+    public MojangProfile(@NotNull MojangProperties properties) {
         this.uniqueId = properties.getUniqueId();
         this.username = properties.getUsername();
         this.timestamp = mapProperty(properties, property -> property.getValue().getTimestamp()).orElse(Instant.now());
@@ -37,7 +37,7 @@ public class MojangProfile {
         this.textures = new Textures(properties);
     }
 
-    private static <T> Optional<T> mapProperty(@NotNull MojangPropertiesResponse properties, @NotNull Function<MojangProperty, T> function) {
+    private static <T> Optional<T> mapProperty(@NotNull MojangProperties properties, @NotNull Function<MojangProperty, T> function) {
         return properties.getProperties()
             .findFirst()
             .map(function);
@@ -54,7 +54,7 @@ public class MojangProfile {
         private Optional<Value> cape = Optional.empty();
 
         @SneakyThrows
-        public Textures(@NotNull MojangPropertiesResponse properties) { // Mojang Api
+        public Textures(@NotNull MojangProperties properties) { // Mojang Api
             MojangProperty property = properties.getProperty();
             MojangProperty.Value value = property.getValue();
             this.slim = value.isSlim();
