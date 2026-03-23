@@ -5,7 +5,7 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import dev.sbs.api.SimplifiedApi;
 import dev.sbs.api.io.stream.ByteArrayDataOutput;
-import dev.sbs.minecraftapi.client.mojang.response.MinecraftPingResponse;
+import dev.sbs.minecraftapi.client.mojang.response.MinecraftPing;
 import dev.sbs.minecraftapi.render.text.segment.TextSegment;
 import lombok.Cleanup;
 import lombok.SneakyThrows;
@@ -34,38 +34,38 @@ public final class MinecraftServerPing {
     public static final int STATUS_HANDSHAKE = 1;
 
     /**
-     * Fetches a {@link MinecraftPingResponse} for the supplied hostname.
+     * Fetches a {@link MinecraftPing} for the supplied hostname.
      * <b>Assumed timeout of 2s and port of 25565.</b>
      *
      * @param hostname Minecraft server hostname.
-     * @return {@link MinecraftPingResponse}
+     * @return {@link MinecraftPing}
      */
-    public @NotNull MinecraftPingResponse pingServer(final String hostname) {
+    public @NotNull MinecraftPing pingServer(final String hostname) {
         return this.pingServer(hostname, 25565);
     }
 
     /**
-     * Fetches a {@link MinecraftPingResponse} for the supplied hostname.
+     * Fetches a {@link MinecraftPing} for the supplied hostname.
      * <b>Assumed timeout of 2s and port of 25565.</b>
      *
      * @param hostname Minecraft server hostname.
      * @param port Minecraft server port.
-     * @return {@link MinecraftPingResponse}
+     * @return {@link MinecraftPing}
      */
-    public @NotNull MinecraftPingResponse pingServer(final String hostname, int port) {
+    public @NotNull MinecraftPing pingServer(final String hostname, int port) {
         return this.pingServer(hostname, port, 2000);
     }
 
     /**
-     * Fetches a {@link MinecraftPingResponse} for the supplied options.
+     * Fetches a {@link MinecraftPing} for the supplied options.
      *
      * @param hostname Minecraft server hostname.
      * @param port Minecraft server port.
      * @param timeout Timeout in milliseconds for the connection to complete.
-     * @return {@link MinecraftPingResponse}
+     * @return {@link MinecraftPing}
      */
     @SneakyThrows
-    public @NotNull MinecraftPingResponse pingServer(@NotNull String hostname, int port, int timeout) {
+    public @NotNull MinecraftPing pingServer(@NotNull String hostname, int port, int timeout) {
         @Cleanup Socket socket = new Socket();
         long start = System.currentTimeMillis();
         socket.connect(new InetSocketAddress(hostname, port), timeout);
@@ -139,7 +139,7 @@ public final class MinecraftServerPing {
 
         }
 
-        MinecraftPingResponse output = SimplifiedApi.getGson().fromJson(jsonObject, MinecraftPingResponse.class);
+        MinecraftPing output = SimplifiedApi.getGson().fromJson(jsonObject, MinecraftPing.class);
         output.setPing(ping);
 
         return output;

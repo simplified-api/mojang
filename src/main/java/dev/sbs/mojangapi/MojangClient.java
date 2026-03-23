@@ -57,10 +57,12 @@ public final class MojangClient extends Client<MojangEndpoint> {
             new RateLimit(200, 1, ChronoUnit.MINUTES)
         ),
         MINECRAFT("minecraft.net"),
+        MINECRAFT_RESOURCES("resources.download.minecraft.net"),
         MINECRAFT_SERVICES("api.minecraftservices.com"),
         MINECRAFT_SESSION("session.minecraft.net"),
         MINECRAFT_SKINS("skins.minecraft.net"),
-        MINECRAFT_TEXTURES("textures.minecraft.net");
+        MINECRAFT_TEXTURES("textures.minecraft.net"),
+        PISTON_META("piston-meta.mojang.com");
 
         private final @NotNull String route;
         private final @NotNull RateLimit rateLimit;
