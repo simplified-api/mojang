@@ -6,7 +6,7 @@ import lombok.Getter;
 import java.util.UUID;
 
 @Getter
-public class MojangUsernameResponse {
+public class MojangUsername {
 
     @SerializedName("name")
     private String username;

@@ -10,7 +10,7 @@ import org.jetbrains.annotations.NotNull;
 import java.util.UUID;
 
 @Getter
-public class MojangPropertiesResponse {
+public class MojangProperties {
 
     @SerializedName("id")
     private UUID uniqueId;

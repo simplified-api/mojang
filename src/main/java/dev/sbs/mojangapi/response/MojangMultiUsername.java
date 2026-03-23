@@ -18,18 +18,18 @@ import java.util.UUID;
 
 @Getter
 @RequiredArgsConstructor
-public class MojangMultiUsernameResponse {
+public class MojangMultiUsername {
 
-    private final @NotNull ConcurrentList<MojangUsernameResponse> profiles;
+    private final @NotNull ConcurrentList<MojangUsername> profiles;
 
-    public @NotNull Optional<MojangUsernameResponse> getProfile(@NotNull String username) {
+    public @NotNull Optional<MojangUsername> getProfile(@NotNull String username) {
         return this.getProfiles()
             .stream()
             .filter(response -> response.getUsername().equalsIgnoreCase(username))
             .findFirst();
     }
 
-    public @NotNull Optional<MojangUsernameResponse> getProfile(@NotNull UUID uniqueId) {
+    public @NotNull Optional<MojangUsername> getProfile(@NotNull UUID uniqueId) {
         return this.getProfiles()
             .stream()
             .filter(response -> response.getUniqueId().equals(uniqueId))
@@ -37,24 +37,24 @@ public class MojangMultiUsernameResponse {
     }
 
     public @NotNull Optional<UUID> getUniqueId(@NotNull String username) {
-        return this.getProfile(username).map(MojangUsernameResponse::getUniqueId);
+        return this.getProfile(username).map(MojangUsername::getUniqueId);
     }
 
     public @NotNull Optional<String> getUsername(@NotNull UUID uniqueId) {
-        return this.getProfile(uniqueId).map(MojangUsernameResponse::getUsername);
+        return this.getProfile(uniqueId).map(MojangUsername::getUsername);
     }
 
-    public static class Deserializer implements JsonDeserializer<MojangMultiUsernameResponse> {
+    public static class Deserializer implements JsonDeserializer<MojangMultiUsername> {
 
         @Override
-        public MojangMultiUsernameResponse deserialize(JsonElement jsonElement, Type type, JsonDeserializationContext jdc) throws JsonParseException {
+        public MojangMultiUsername deserialize(JsonElement jsonElement, Type type, JsonDeserializationContext jdc) throws JsonParseException {
             Gson gson = SimplifiedApi.getGson();
 
-            return new MojangMultiUsernameResponse(
+            return new MojangMultiUsername(
                 jsonElement.getAsJsonArray()
                     .asList()
                     .stream()
-                    .map(profile -> gson.fromJson(profile, MojangUsernameResponse.class))
+                    .map(profile -> gson.fromJson(profile, MojangUsername.class))
                     .collect(Concurrent.toUnmodifiableList())
             );
         }

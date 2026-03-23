@@ -9,7 +9,7 @@ import java.util.List;
 
 @Getter
 @ToString
-public class MinecraftPingResponse {
+public class MinecraftPing {
 
     private Description description;
     private Players players;
