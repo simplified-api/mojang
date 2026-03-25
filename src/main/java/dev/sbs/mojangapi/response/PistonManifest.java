@@ -6,7 +6,7 @@ import dev.sbs.api.collection.concurrent.ConcurrentList;
 import lombok.Getter;
 import org.jetbrains.annotations.NotNull;
 
-import java.time.Instant;
+import java.time.OffsetDateTime;
 
 /**
  * The full Minecraft version manifest from Mojang's Piston Meta API, containing
@@ -60,13 +60,13 @@ public final class PistonManifest {
         @SerializedName("url")
         private @NotNull String url;
 
-        /** The timestamp when this version entry was last updated. */
+        /** The timestamp when this version entry was last updated in {@code ISO-8601} standard. */
         @SerializedName("time")
-        private @NotNull Instant time;
+        private @NotNull OffsetDateTime time;
 
-        /** The timestamp when this version was originally released. */
+        /** The timestamp when this version was originally released in {@code ISO-8601} standard. */
         @SerializedName("releaseTime")
-        private @NotNull Instant releaseTime;
+        private @NotNull OffsetDateTime releaseTime;
 
         /** The SHA-1 hash of the version metadata JSON. */
         @SerializedName("sha1")
