@@ -62,6 +62,7 @@ public final class MojangClient extends Client<MojangEndpoint> {
         MINECRAFT_SESSION("session.minecraft.net"),
         MINECRAFT_SKINS("skins.minecraft.net"),
         MINECRAFT_TEXTURES("textures.minecraft.net"),
+        PISTON_DATA("piston-data.mojang.com"),
         PISTON_META("piston-meta.mojang.com");
 
         private final @NotNull String route;

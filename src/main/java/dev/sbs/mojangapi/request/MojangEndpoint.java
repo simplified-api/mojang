@@ -3,10 +3,12 @@ package dev.sbs.minecraftapi.client.mojang.request;
 import dev.sbs.api.client.request.Endpoint;
 import dev.sbs.api.client.request.expander.StringArrayQuoteExpander;
 import dev.sbs.minecraftapi.client.mojang.MojangClient;
+import dev.sbs.minecraftapi.client.mojang.MojangProxy;
 import dev.sbs.minecraftapi.client.mojang.exception.MojangApiException;
 import dev.sbs.minecraftapi.client.mojang.response.MojangMultiUsername;
 import dev.sbs.minecraftapi.client.mojang.response.MojangProperties;
 import dev.sbs.minecraftapi.client.mojang.response.MojangUsername;
+import dev.sbs.minecraftapi.client.mojang.response.PistonAssets;
 import dev.sbs.minecraftapi.client.mojang.response.PistonManifest;
 import dev.sbs.minecraftapi.client.mojang.response.PistonMetadata;
 import feign.Body;
@@ -15,31 +17,61 @@ import feign.Param;
 import feign.RequestLine;
 import org.jetbrains.annotations.NotNull;
 
+import java.io.InputStream;
 import java.util.Collection;
 import java.util.UUID;
 
+/**
+ * Feign endpoint interface for Mojang and Minecraft services.
+ * <p>
+ * Methods are dynamically routed to different Mojang domains via
+ * {@link MojangDomain} annotations. The default domain is
+ * {@link MojangClient.Domain#MINECRAFT_SERVICES MINECRAFT_SERVICES}; individual
+ * methods override this to target the session server, Piston Meta, Piston Data
+ * CDN, or resource CDN as appropriate.
+ * <p>
+ * Most endpoints do not require authentication. The global rate limit is
+ * 200 requests per 2 minutes per IP address; for IPv6, limits are bucketed
+ * by /56 subnet. The session server has a separate limit of approximately
+ * 400 requests per 10 seconds.
+ * <p>
+ * Instances are obtained through {@link MojangProxy#getEndpoint()}, which
+ * selects a non-rate-limited {@link MojangClient} from the connection pool.
+ *
+ * @see MojangClient
+ * @see MojangProxy
+ * @see MojangDomain
+ * @see <a href="https://minecraft.wiki/w/Mojang_API">Mojang API</a>
+ */
 @MojangDomain(MojangClient.Domain.MINECRAFT_SERVICES)
 public interface MojangEndpoint extends Endpoint {
 
+    // ---- Profile lookup ----
+
     /**
-     * Requests player information by username in bulk.
+     * Fetches multiple player profiles by username in bulk.
+     * <p>
+     * Accepts up to 10 case-insensitive usernames per request. Players that
+     * do not exist are silently omitted from the response.
      *
-     * @param usernames the case-insensitive names of the players
-     * @return the bulk username lookup response
-     * @throws MojangApiException when the Mojang API returns an HTTP status of 400 or higher
-     * @apiNote the maximum number of usernames per request is 10
+     * @param usernames the player usernames to look up
+     * @return the bulk username lookup response containing matched profiles
+     * @throws MojangApiException if the server responds with an HTTP status of 400 or higher
+     * @see #getMultipleUniqueIds(String...)
      */
     default @NotNull MojangMultiUsername getMultipleUniqueIds(@NotNull Collection<String> usernames) throws MojangApiException {
         return this.getMultipleUniqueIds(usernames.toArray(new String[] { }));
     }
 
     /**
-     * Requests player information by username in bulk.
+     * Fetches multiple player profiles by username in bulk.
+     * <p>
+     * Accepts up to 10 case-insensitive usernames per request. Players that
+     * do not exist are silently omitted from the response.
      *
-     * @param usernames the case-insensitive names of the players
-     * @return the bulk username lookup response
-     * @throws MojangApiException when the Mojang API returns an HTTP status of 400 or higher
-     * @apiNote the maximum number of usernames per request is 10
+     * @param usernames the player usernames to look up
+     * @return the bulk username lookup response containing matched profiles
+     * @throws MojangApiException if the server responds with an HTTP status of 400 or higher
      */
     @Body("[{usernames}]")
     @Headers("Content-Type: application/json")
@@ -47,41 +79,46 @@ public interface MojangEndpoint extends Endpoint {
     @NotNull MojangMultiUsername getMultipleUniqueIds(@NotNull @Param(value = "usernames", expander = StringArrayQuoteExpander.class) String... usernames) throws MojangApiException;
 
     /**
-     * Requests player information by username.
+     * Fetches a player's unique id and case-corrected username by their
+     * case-insensitive username.
      *
-     * @param username the case-insensitive name of the player
-     * @return the username lookup response
-     * @throws MojangApiException when the Mojang API returns an HTTP status of 400 or higher
+     * @param username the case-insensitive player username
+     * @return the profile containing the player's unique id and username
+     * @throws MojangApiException if the server responds with an HTTP status of 400 or higher
      */
     @RequestLine("GET /minecraft/profile/lookup/name/{username}")
     @NotNull MojangUsername getPlayer(@NotNull @Param("username") String username) throws MojangApiException;
 
     /**
-     * Retrieves player information by unique id.
+     * Fetches a player's username and profile status by unique id.
      *
-     * @param uniqueId the unique id of the player
-     * @return the username lookup response
-     * @throws MojangApiException when the Mojang API returns an HTTP status of 400 or higher
+     * @param uniqueId the player's unique id
+     * @return the profile containing the player's unique id and username
+     * @throws MojangApiException if the server responds with an HTTP status of 400 or higher
      */
     @RequestLine("GET /minecraft/profile/lookup/{username}")
     @NotNull MojangUsername getPlayer(@NotNull @Param("uuid") UUID uniqueId) throws MojangApiException;
 
     /**
-     * Requests player properties by unique id.
+     * Fetches a player's profile properties, including Base64-encoded skin
+     * and cape texture data with cryptographic signatures.
      *
-     * @param uniqueId the unique id of the player
-     * @return the player properties response
-     * @throws MojangApiException when the Mojang API returns an HTTP status of 400 or higher
+     * @param uniqueId the player's unique id
+     * @return the profile properties including signed texture data
+     * @throws MojangApiException if the server responds with an HTTP status of 400 or higher
      */
     @MojangDomain(MojangClient.Domain.MOJANG_SESSIONSERVER)
     @RequestLine("GET /session/minecraft/profile/{uniqueId}?unsigned=false")
     @NotNull MojangProperties getProperties(@NotNull @Param("uniqueId") UUID uniqueId) throws MojangApiException;
 
+    // ---- Piston Meta ----
+
     /**
-     * Fetches the full Minecraft version manifest from Piston Meta.
+     * Fetches the full Minecraft version manifest from Piston Meta, containing
+     * every known release and snapshot with download URLs for their metadata.
      *
-     * @return the version manifest containing all known versions
-     * @throws MojangApiException when the Piston Meta API returns an HTTP status of 400 or higher
+     * @return the version manifest
+     * @throws MojangApiException if the server responds with an HTTP status of 400 or higher
      */
     @MojangDomain(MojangClient.Domain.PISTON_META)
     @RequestLine("GET /mc/game/version_manifest_v2.json")
@@ -92,22 +129,109 @@ public interface MojangEndpoint extends Endpoint {
      *
      * @param entry the version manifest entry
      * @return the version metadata containing download URLs and asset index
-     * @throws MojangApiException when the Piston Meta API returns an HTTP status of 400 or higher
+     * @throws MojangApiException if the server responds with an HTTP status of 400 or higher
+     * @see #getVersionMetadata(String, String)
      */
     default @NotNull PistonMetadata getVersionMetadata(@NotNull PistonManifest.Entry entry) throws MojangApiException {
         return this.getVersionMetadata(entry.getSha1(), entry.getVersion());
     }
 
     /**
-     * Fetches version metadata by SHA-1 hash and version identifier.
+     * Fetches version metadata by SHA-1 hash and version identifier, containing
+     * client/server JAR download URLs, asset index reference, and Java version
+     * requirements.
      *
      * @param sha1 the SHA-1 hash of the version metadata JSON
      * @param version the version identifier (e.g. {@code "1.21.10"})
-     * @return the version metadata containing download URLs and asset index
-     * @throws MojangApiException when the Piston Meta API returns an HTTP status of 400 or higher
+     * @return the version metadata
+     * @throws MojangApiException if the server responds with an HTTP status of 400 or higher
      */
     @MojangDomain(MojangClient.Domain.PISTON_META)
     @RequestLine("GET /v1/packages/{sha1}/{version}.json")
     @NotNull PistonMetadata getVersionMetadata(@NotNull @Param("sha1") String sha1, @NotNull @Param("version") String version) throws MojangApiException;
+
+    /**
+     * Fetches an asset index by SHA-1 hash and index identifier, containing
+     * the mapping of every asset path to its download hash and size.
+     *
+     * @param sha1 the SHA-1 hash of the asset index JSON
+     * @param id the asset index identifier (e.g. {@code "27"})
+     * @return the asset index
+     * @throws MojangApiException if the server responds with an HTTP status of 400 or higher
+     */
+    @MojangDomain(MojangClient.Domain.PISTON_META)
+    @RequestLine("GET /v1/packages/{sha1}/{id}.json")
+    @NotNull PistonAssets getAssetIndex(@NotNull @Param("sha1") String sha1, @NotNull @Param("id") String id) throws MojangApiException;
+
+    /**
+     * Fetches the asset index for the given asset index metadata.
+     *
+     * @param assetIndex the asset index metadata from {@link PistonMetadata#getAssetIndex()}
+     * @return the asset index
+     * @throws MojangApiException if the server responds with an HTTP status of 400 or higher
+     * @see #getAssetIndex(String, String)
+     */
+    default @NotNull PistonAssets getAssetIndex(@NotNull PistonMetadata.AssetIndex assetIndex) throws MojangApiException {
+        return this.getAssetIndex(assetIndex.getSha1(), assetIndex.getId());
+    }
+
+    // ---- Binary downloads ----
+
+    /**
+     * Downloads the Minecraft client JAR as a streaming {@link InputStream}
+     * from the given SHA-1 hash.
+     * <p>
+     * The caller owns the returned stream's lifecycle and <b>must</b> close it
+     * (e.g. via try-with-resources) to release the underlying HTTP connection
+     * back to the pool.
+     *
+     * @param sha1 the SHA-1 hash identifying the client JAR
+     * @return a streaming input stream of the client JAR bytes
+     * @throws MojangApiException if the server responds with an HTTP status of 400 or higher
+     */
+    @MojangDomain(MojangClient.Domain.PISTON_DATA)
+    @RequestLine("GET /v1/objects/{sha1}/client.jar")
+    @NotNull InputStream downloadClientJar(@NotNull @Param("sha1") String sha1) throws MojangApiException;
+
+    /**
+     * Downloads the Minecraft client JAR as a streaming {@link InputStream} from the given download entry.
+     * <p>
+     * The caller owns the returned stream's lifecycle and <b>must</b> close it
+     * (e.g. via try-with-resources) to release the underlying HTTP connection
+     * back to the pool.
+     *
+     * @param entry the download entry from {@link PistonMetadata.Downloads#getClient()}
+     * @return a streaming input stream of the client JAR bytes
+     * @throws MojangApiException if the server responds with an HTTP status of 400 or higher
+     * @see #downloadClientJar(String)
+     */
+    default @NotNull InputStream downloadClientJar(@NotNull PistonMetadata.Downloads.Entry entry) throws MojangApiException {
+        return this.downloadClientJar(entry.getSha1());
+    }
+
+    /**
+     * Downloads an individual Minecraft asset as a byte array from the
+     * resource CDN ({@code resources.download.minecraft.net}).
+     *
+     * @param prefix the first two characters of the asset hash
+     * @param hash the full SHA-1 hash of the asset
+     * @return the asset contents
+     * @throws MojangApiException if the server responds with an HTTP status of 400 or higher
+     */
+    @MojangDomain(MojangClient.Domain.MINECRAFT_RESOURCES)
+    @RequestLine("GET /{prefix}/{hash}")
+    byte @NotNull [] downloadAsset(@NotNull @Param("prefix") String prefix, @NotNull @Param("hash") String hash) throws MojangApiException;
+
+    /**
+     * Downloads an individual Minecraft asset for the given asset entry.
+     *
+     * @param entry the asset entry from {@link PistonAssets#getObjects()}
+     * @return the asset contents
+     * @throws MojangApiException if the server responds with an HTTP status of 400 or higher
+     * @see #downloadAsset(String, String)
+     */
+    default byte @NotNull [] downloadAsset(@NotNull PistonAssets.Entry entry) throws MojangApiException {
+        return this.downloadAsset(entry.getHash().substring(0, 2), entry.getHash());
+    }
 
 }
