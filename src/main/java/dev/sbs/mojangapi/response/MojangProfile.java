@@ -1,9 +1,8 @@
-package dev.sbs.minecraftapi.client.mojang.profile;
+package dev.sbs.minecraftapi.client.mojang.response;
 
 import dev.sbs.api.collection.concurrent.Concurrent;
 import dev.sbs.api.collection.concurrent.ConcurrentList;
 import dev.sbs.api.util.StringUtil;
-import dev.sbs.minecraftapi.client.mojang.response.MojangProperties;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

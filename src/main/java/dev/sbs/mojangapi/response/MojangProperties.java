@@ -3,7 +3,6 @@ package dev.sbs.minecraftapi.client.mojang.response;
 import com.google.gson.annotations.SerializedName;
 import dev.sbs.api.collection.concurrent.Concurrent;
 import dev.sbs.api.collection.concurrent.ConcurrentList;
-import dev.sbs.minecraftapi.client.mojang.profile.MojangProperty;
 import lombok.Getter;
 import org.jetbrains.annotations.NotNull;
 

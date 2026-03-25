@@ -1,4 +1,4 @@
-package dev.sbs.minecraftapi.client.mojang.profile;
+package dev.sbs.minecraftapi.client.mojang.response;
 
 import com.google.gson.annotations.SerializedName;
 import dev.sbs.api.SimplifiedApi;
