@@ -2,6 +2,7 @@ package dev.sbs.minecraftapi.client.mojang.response;
 
 import com.google.gson.annotations.SerializedName;
 import lombok.Getter;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.UUID;
 
@@ -9,9 +10,9 @@ import java.util.UUID;
 public class MojangUsername {
 
     @SerializedName("name")
-    private String username;
+    private @NotNull String username;
     @SerializedName("id")
-    private UUID uniqueId;
+    private @NotNull UUID uniqueId;
     private boolean legacy;
     private boolean demo;
 
