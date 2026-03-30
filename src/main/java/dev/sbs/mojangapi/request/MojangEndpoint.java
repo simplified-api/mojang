@@ -96,8 +96,8 @@ public interface MojangEndpoint extends Endpoint {
      * @return the profile containing the player's unique id and username
      * @throws MojangApiException if the server responds with an HTTP status of 400 or higher
      */
-    @RequestLine("GET /minecraft/profile/lookup/{username}")
-    @NotNull MojangUsername getPlayer(@NotNull @Param("uuid") UUID uniqueId) throws MojangApiException;
+    @RequestLine("GET /minecraft/profile/lookup/{uniqueId}")
+    @NotNull MojangUsername getPlayer(@NotNull @Param("uniqueId") UUID uniqueId) throws MojangApiException;
 
     /**
      * Fetches a player's profile properties, including Base64-encoded skin
