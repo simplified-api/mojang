@@ -2,7 +2,6 @@ package dev.sbs.minecraftapi.client.mojang;
 
 import dev.sbs.api.collection.concurrent.Concurrent;
 import dev.sbs.api.collection.concurrent.ConcurrentList;
-import dev.sbs.api.util.PrimitiveUtil;
 import dev.sbs.api.util.StringUtil;
 import dev.sbs.minecraftapi.client.mojang.exception.MojangApiException;
 import dev.sbs.minecraftapi.client.mojang.request.MojangEndpoint;
@@ -13,9 +12,12 @@ import org.jetbrains.annotations.NotNull;
 
 import java.net.Inet6Address;
 import java.net.UnknownHostException;
+import java.util.Arrays;
 import java.util.Optional;
 import java.util.UUID;
 import java.util.concurrent.ThreadLocalRandom;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 @NoArgsConstructor
 public final class MojangProxy {
@@ -31,23 +33,25 @@ public final class MojangProxy {
 
     /**
      * Retrieves an instance of {@link MojangClient} to handle API communication.
-     * <p>
-     * This method ensures that there is always at least one default client present
-     * and returns the first available client that is not rate-limited. If no such client exists,
-     * a new client with a randomized IPv6 address is created and added to the clients pool.
      *
-     * @return An instance of {@link MojangClient}, prioritized to avoid rate limitations.
+     * <p>Ensures at least one client is present in the pool. When an IPv6 network prefix is
+     * configured, every client - including the initial default - uses a randomized IPv6 source
+     * address. Returns the first available client that is not rate-limited. If all clients are
+     * rate-limited, a new client with a fresh randomized IPv6 address is created and added to
+     * the pool.
+     *
+     * @return an instance of {@link MojangClient}, prioritized to avoid rate limitations
      */
     public @NotNull MojangClient getApiClient() {
         // Add Default Client
-        this.clients.addIf(this.clients::isEmpty, new MojangClient());
+        this.clients.addIf(this.clients::isEmpty, new MojangClient(this.getRandomInet6Address()));
 
         return this.clients.stream()
             .filter(client -> client.notRateLimited(MojangClient.Domain.MINECRAFT_SERVICES))
             .findFirst()
             .or(() -> Optional.of(new MojangClient(this.getRandomInet6Address())))
             .filter(this.clients::add)
-            .orElse(this.clients.get(0));
+            .orElse(this.clients.getFirst());
     }
 
     public @NotNull MojangEndpoint getEndpoint() {
@@ -84,14 +88,18 @@ public final class MojangProxy {
      * @return An {@link Optional} containing a randomized {@link Inet6Address}, or an empty {@link Optional}
      *         if the network prefix is not defined.
      */
-    private @NotNull Optional<Inet6Address> getRandomInet6Address() {
+    public @NotNull Optional<Inet6Address> getRandomInet6Address() {
         return this.getInet6NetworkPrefix()
             .map(networkPrefix -> {
-                String inet6NetworkPrefix = StringUtil.join(networkPrefix, ":");
-                String inet6NetworkTail = StringUtil.repeat(String.format("%04x", getRandomInet6Group()), ":", 8 - networkPrefix.length);
+                String prefix = Arrays.stream(networkPrefix)
+                    .map(group -> String.format("%04x", group))
+                    .collect(Collectors.joining(":"));
+                String tail = IntStream.range(0, 8 - networkPrefix.length)
+                    .mapToObj(i -> String.format("%04x", getRandomInet6Group()))
+                    .collect(Collectors.joining(":"));
 
                 try {
-                    return Inet6Address.getByName(inet6NetworkPrefix + inet6NetworkTail);
+                    return Inet6Address.getByName(prefix + ":" + tail);
                 } catch (UnknownHostException uhex) {
                     throw new RuntimeException(uhex);
                 }
@@ -104,9 +112,13 @@ public final class MojangProxy {
     }
 
     /**
-     * Set your assigned IPv6 network prefix to cycle through for web requests.
-     * <br><br>
-     * <h5>Create Hurricane Election IPv6 Tunnel</h5>
+     * Sets the IPv6 network prefix used to generate randomized source addresses for web requests.
+     *
+     * <p>Accepts a standard CIDR notation string (e.g., {@code "2000:444:ffff::/48"}).
+     * The prefix length suffix is stripped, and the address portion is parsed into groups.
+     * Trailing empty groups from {@code "::"} shorthand are excluded.
+     *
+     * <h5>Create Hurricane Electric IPv6 Tunnel</h5>
      * <ol>
      *     <li>Go to <a href="https://tunnelbroker.net/">TunnelBroker</a></li>
      *     <li>Create an account or login</li>
@@ -126,49 +138,89 @@ public final class MojangProxy {
      *     <li>Click on Generate /48</li>
      * </ol>
      *
-     * <h5>Create Server IPv6 Tunnel (Requires Root Access)</h5>
+     * <h5>Variables</h5>
      * <pre><code>
-     * modprobe ipv6
-     * modprobe sit
-     * ip tunnel add he-ipv6 mode sit remote SERVER_IPV4_ADDRESS local CLIENT_IPV4_ADDRESS ttl 255
-     * ip link set he-ipv6 up
-     * ip link set he-ipv6 mtu 1480
+     * SERVER_IPV4 = Server IPv4 Address
+     * CLIENT_IPV4 = Client IPv4 Address
+     * CLIENT_IPV6 = Client IPv6 Address
+     * ROUTED_48   = Routed /48 prefix
      * </code></pre>
      *
-     * <h5>Setup Routing</h5>
+     * <h5>Create Routing Table</h5>
      * <pre><code>
-     * ip addr add ROUTED_48::2/48 dev he-ipv6
-     * ip -6 route add local ROUTED_48::/48 dev lo
-     * echo "100 he" >> /etc/iproute2/rt_tables
-     * ip -6 route add default dev he-ipv6 table he
-     * ip -6 rule add pref 1000 from ROUTED_48::/48 lookup he
+     * grep -q '^100 he' /etc/iproute2/rt_tables || echo "100 he" >> /etc/iproute2/rt_tables
+     * </code></pre>
+     *
+     * <h5>Enable IPv6 Non-Local Binding & Forwarding and TCP Optimizations</h5>
+     * <pre><code>
+     * cat > /etc/sysctl.d/99-he-tunnel.conf << 'EOF'
+     * # Enable nonlocal bind
+     * net.ipv6.ip_nonlocal_bind = 1
+     *
+     * # Enable ipv6 forwarding
+     * net.ipv6.conf.all.forwarding = 1
+     *
+     * # Enable tcp optimizations
+     * net.ipv4.tcp_fastopen = 3
+     * net.core.default_qdisc = fq
+     * net.ipv4.tcp_congestion_control = bbr
+     * net.ipv4.tcp_slow_start_after_idle = 0
+     * EOF
+     * sysctl -p /etc/sysctl.d/99-he-tunnel.conf
      * </code></pre>
      *
      * <h5>Enable Non-Local IPv6 Binding</h5>
      * <pre><code>
-     * echo "net.ipv6.ip_nonlocal_bind = 1" > /etc/sysctl.d/99-nonlocal-bind.conf
-     * sysctl -p /etc/sysctl.d/99-nonlocal-bind.conf
+     * cat > /etc/systemd/system/he-ipv6.service << 'EOF'
+     * [Unit]
+     * Description=Hurricane Electric IPv6 Tunnel
+     * After=network-online.target
+     * Wants=network-online.target
+     *
+     * [Service]
+     * Type=oneshot
+     * RemainAfterExit=yes
+     *
+     * ExecStart=/usr/sbin/modprobe ipv6
+     * ExecStart=/usr/sbin/modprobe sit
+     * ExecStart=/usr/sbin/ip tunnel add he-ipv6 mode sit remote SERVER_IPV4 local CLIENT_IPV4 ttl 255
+     * ExecStart=/usr/sbin/ip link set he-ipv6 up
+     * ExecStart=/usr/sbin/ip link set he-ipv6 mtu 1480
+     * ExecStart=/usr/sbin/ip -6 addr add CLIENT_IPV6 dev he-ipv6
+     * ExecStart=/usr/sbin/ip -6 addr add ROUTED_48::2/48 dev he-ipv6
+     * ExecStart=/usr/sbin/ip -6 route add local ROUTED_48::/48 dev lo
+     * ExecStart=/usr/sbin/ip -6 route add default dev he-ipv6 table he
+     * ExecStart=/usr/sbin/ip -6 rule add pref 1000 from ROUTED_48::/48 lookup he
+     *
+     * ExecStop=/usr/sbin/ip -6 rule del pref 1000 from ROUTED_48::/48 lookup he
+     * ExecStop=/usr/sbin/ip tunnel del he-ipv6
+     *
+     * [Install]
+     * WantedBy=multi-user.target
+     * EOF
      * </code></pre>
      *
-     * <h5>Enable IPv6 Forwarding</h5>
+     * <h5>Launch Service</h5>
      * <pre><code>
-     * echo "net.ipv6.conf.all.forwarding = 1" > /etc/sysctl.d/99-ipv6-forwarding.conf
-     * sysctl -p /etc/sysctl.d/99-ipv6-forwarding.conf
+     * systemctl daemon-reload
+     * systemctl enable he-ipv6
+     * systemctl start he-ipv6
      * </code></pre>
      *
-     * <h5>Enable TCP Optimizations</h5>
-     * <pre><code>
-     * echo "net.ipv4.tcp_fastopen = 3" >> /etc/sysctl.d/99-tcp-optimizations.conf
-     * echo "net.core.default_qdisc = fq" >> /etc/sysctl.d/99-tcp-optimizations.conf
-     * echo "net.ipv4.tcp_congestion_control = bbr" >> /etc/sysctl.d/99-tcp-optimizations.conf
-     * echo "net.ipv4.tcp_slow_start_after_idle = 0" >> /etc/sysctl.d/99-tcp-optimizations.conf
-     * sysctl -p /etc/sysctl.d/99-tcp-optimizations.conf
-     * </code></pre>
+     * <h5>JVM Requirement</h5>
+     * <p>The JVM must be started with {@code -Djava.net.preferIPv6Addresses=true}.
+     * Without this, Java resolves hostnames to IPv4 addresses first, and an IPv6-bound
+     * socket cannot connect to an IPv4 destination ({@code Network unreachable}).
      *
-     * @param networkPrefix Your IPv6 Network Prefix
+     * @param cidr an IPv6 network prefix in CIDR notation (e.g., {@code "2000:444:33ff::/48"})
      */
-    public void setInet6NetworkPrefix(int[] networkPrefix) {
-        this.inet6NetworkPrefix = Optional.ofNullable(PrimitiveUtil.wrap(networkPrefix));
+    public void setInet6NetworkPrefix(@NotNull String cidr) {
+        String address = cidr.split("/")[0];
+        Integer[] groups = Arrays.stream(address.split(":"))
+            .filter(StringUtil::isNotEmpty)
+            .map(group -> Integer.parseInt(group, 16))
+            .toArray(Integer[]::new);
+        this.inet6NetworkPrefix = Optional.of(groups);
     }
 
 }
