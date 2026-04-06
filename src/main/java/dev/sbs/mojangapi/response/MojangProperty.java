@@ -1,10 +1,10 @@
 package dev.sbs.minecraftapi.client.mojang.response;
 
 import com.google.gson.annotations.SerializedName;
-import dev.sbs.api.SimplifiedApi;
-import dev.sbs.api.io.gson.SerializedPath;
-import dev.sbs.api.persistence.type.GsonType;
-import dev.sbs.api.util.StringUtil;
+import dev.sbs.minecraftapi.MinecraftApi;
+import dev.simplified.gson.SerializedPath;
+import dev.simplified.persistence.type.GsonType;
+import dev.simplified.util.StringUtil;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -30,7 +30,7 @@ public class MojangProperty {
     }
 
     public @NotNull Value getValue() {
-        return SimplifiedApi.getGson().fromJson(this.getRawJson(), Value.class);
+        return MinecraftApi.getGson().fromJson(this.getRawJson(), Value.class);
     }
 
     @Getter

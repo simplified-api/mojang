@@ -5,9 +5,9 @@ import com.google.gson.JsonDeserializationContext;
 import com.google.gson.JsonDeserializer;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonParseException;
-import dev.sbs.api.SimplifiedApi;
-import dev.sbs.api.collection.concurrent.Concurrent;
-import dev.sbs.api.collection.concurrent.ConcurrentList;
+import dev.sbs.minecraftapi.MinecraftApi;
+import dev.simplified.collection.Concurrent;
+import dev.simplified.collection.ConcurrentList;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.jetbrains.annotations.NotNull;
@@ -48,7 +48,7 @@ public class MojangMultiUsername {
 
         @Override
         public MojangMultiUsername deserialize(JsonElement jsonElement, Type type, JsonDeserializationContext jdc) throws JsonParseException {
-            Gson gson = SimplifiedApi.getGson();
+            Gson gson = MinecraftApi.getGson();
 
             return new MojangMultiUsername(
                 jsonElement.getAsJsonArray()

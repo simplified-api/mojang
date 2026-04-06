@@ -1,11 +1,13 @@
 package dev.sbs.minecraftapi.client.mojang;
 
-import dev.sbs.api.client.Client;
-import dev.sbs.api.client.decoder.ClientErrorDecoder;
-import dev.sbs.api.client.ratelimit.RateLimit;
-import dev.sbs.api.client.route.DynamicRouteProvider;
+import com.google.gson.Gson;
+import dev.sbs.minecraftapi.MinecraftApi;
 import dev.sbs.minecraftapi.client.mojang.exception.MojangApiException;
 import dev.sbs.minecraftapi.client.mojang.request.MojangEndpoint;
+import dev.simplified.client.Client;
+import dev.simplified.client.decoder.ClientErrorDecoder;
+import dev.simplified.client.ratelimit.RateLimit;
+import dev.simplified.client.route.DynamicRouteProvider;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
@@ -19,6 +21,11 @@ import java.util.Optional;
 @Getter
 @NoArgsConstructor
 public final class MojangClient extends Client<MojangEndpoint> {
+
+    @Override
+    protected @NotNull Gson getGson() {
+        return MinecraftApi.getGson();
+    }
 
     public MojangClient(@Nullable Inet6Address inet6Address) {
         this(Optional.ofNullable(inet6Address));

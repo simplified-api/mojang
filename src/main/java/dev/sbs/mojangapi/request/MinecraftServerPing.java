@@ -3,10 +3,10 @@ package dev.sbs.minecraftapi.client.mojang.request;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
-import dev.sbs.api.SimplifiedApi;
-import dev.sbs.api.io.stream.ByteArrayDataOutput;
+import dev.sbs.minecraftapi.MinecraftApi;
 import dev.sbs.minecraftapi.client.mojang.response.MinecraftPing;
 import dev.sbs.minecraftapi.generator.text.segment.TextSegment;
+import dev.simplified.stream.ByteArrayDataOutput;
 import lombok.Cleanup;
 import lombok.SneakyThrows;
 import org.jetbrains.annotations.NotNull;
@@ -139,7 +139,7 @@ public final class MinecraftServerPing {
 
         }
 
-        MinecraftPing output = SimplifiedApi.getGson().fromJson(jsonObject, MinecraftPing.class);
+        MinecraftPing output = MinecraftApi.getGson().fromJson(jsonObject, MinecraftPing.class);
         output.setPing(ping);
 
         return output;

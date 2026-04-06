@@ -1,6 +1,6 @@
 package dev.sbs.minecraftapi.client.mojang.response;
 
-import dev.sbs.api.util.RegexUtil;
+import dev.simplified.util.RegexUtil;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;

@@ -1,7 +1,5 @@
 package dev.sbs.minecraftapi.client.mojang.request;
 
-import dev.sbs.api.client.request.Endpoint;
-import dev.sbs.api.client.request.expander.StringArrayQuoteExpander;
 import dev.sbs.minecraftapi.client.mojang.MojangClient;
 import dev.sbs.minecraftapi.client.mojang.MojangProxy;
 import dev.sbs.minecraftapi.client.mojang.exception.MojangApiException;
@@ -11,6 +9,8 @@ import dev.sbs.minecraftapi.client.mojang.response.MojangUsername;
 import dev.sbs.minecraftapi.client.mojang.response.PistonAssets;
 import dev.sbs.minecraftapi.client.mojang.response.PistonManifest;
 import dev.sbs.minecraftapi.client.mojang.response.PistonMetadata;
+import dev.simplified.client.request.Endpoint;
+import dev.simplified.client.request.expander.StringArrayQuoteExpander;
 import feign.Body;
 import feign.Headers;
 import feign.Param;

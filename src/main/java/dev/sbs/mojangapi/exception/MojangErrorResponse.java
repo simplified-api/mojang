@@ -1,7 +1,7 @@
 package dev.sbs.minecraftapi.client.mojang.exception;
 
 import com.google.gson.annotations.SerializedName;
-import dev.sbs.api.client.exception.ApiErrorResponse;
+import dev.simplified.client.exception.ApiErrorResponse;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
