@@ -1,6 +1,5 @@
 package dev.sbs.minecraftapi.client.mojang.request;
 
-import dev.sbs.minecraftapi.client.mojang.MojangDomain;
 import dev.simplified.client.route.DynamicRoute;
 import org.jetbrains.annotations.NotNull;
 

@@ -1,6 +1,5 @@
-package dev.sbs.minecraftapi.client.mojang;
+package dev.sbs.minecraftapi.client.mojang.request;
 
-import dev.sbs.minecraftapi.client.mojang.request.MojangRoute;
 import dev.simplified.client.ratelimit.RateLimit;
 import dev.simplified.client.route.DynamicRouteProvider;
 import lombok.Getter;
