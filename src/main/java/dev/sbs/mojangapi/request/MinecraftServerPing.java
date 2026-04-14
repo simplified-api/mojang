@@ -5,7 +5,7 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import dev.sbs.minecraftapi.MinecraftApi;
 import dev.sbs.minecraftapi.client.mojang.response.MinecraftPing;
-import dev.sbs.renderer.text.segment.TextSegment;
+import dev.sbs.renderer.text.TextSegment;
 import dev.simplified.stream.ByteArrayDataOutput;
 import lombok.Cleanup;
 import lombok.SneakyThrows;
