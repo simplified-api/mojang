@@ -1,20 +1,18 @@
 package dev.sbs.minecraftapi.client.mojang.exception;
 
-import dev.sbs.minecraftapi.MinecraftApi;
-import dev.simplified.client.exception.ApiException;
-import lombok.Getter;
+import com.google.gson.Gson;
+import dev.simplified.client.exception.JsonApiException;
 import org.jetbrains.annotations.NotNull;
 
-@Getter
-public final class MojangApiException extends ApiException {
+public final class MojangApiException extends JsonApiException {
 
-    private final @NotNull MojangErrorResponse response;
+    public MojangApiException(@NotNull Gson gson, @NotNull String methodKey, @NotNull feign.Response response) {
+        super(methodKey, response, "Mojang", gson, MojangErrorResponse.class, MojangErrorResponse.Unknown::new);
+    }
 
-    public MojangApiException(@NotNull String methodKey, @NotNull feign.Response response) {
-        super(methodKey, response, "Mojang");
-        this.response = this.getBody()
-            .map(json -> super.fromJson(MinecraftApi.getGson(), json, MojangErrorResponse.class))
-            .orElse(new MojangErrorResponse.Unknown());
+    @Override
+    public @NotNull MojangErrorResponse getResponse() {
+        return (MojangErrorResponse) super.getResponse();
     }
 
 }

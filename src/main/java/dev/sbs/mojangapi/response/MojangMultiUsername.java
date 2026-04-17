@@ -1,16 +1,15 @@
 package dev.sbs.minecraftapi.client.mojang.response;
 
-import com.google.gson.Gson;
 import com.google.gson.JsonDeserializationContext;
 import com.google.gson.JsonDeserializer;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonParseException;
-import dev.sbs.minecraftapi.MinecraftApi;
 import dev.simplified.collection.Concurrent;
 import dev.simplified.collection.ConcurrentList;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NonNull;
 
 import java.lang.reflect.Type;
 import java.util.Optional;
@@ -47,14 +46,12 @@ public class MojangMultiUsername {
     public static class Deserializer implements JsonDeserializer<MojangMultiUsername> {
 
         @Override
-        public MojangMultiUsername deserialize(JsonElement jsonElement, Type type, JsonDeserializationContext jdc) throws JsonParseException {
-            Gson gson = MinecraftApi.getGson();
-
+        public MojangMultiUsername deserialize(@NonNull JsonElement jsonElement, Type type, JsonDeserializationContext jdc) throws JsonParseException {
             return new MojangMultiUsername(
                 jsonElement.getAsJsonArray()
                     .asList()
                     .stream()
-                    .map(profile -> gson.fromJson(profile, MojangUsername.class))
+                    .map(profile -> (MojangUsername) jdc.deserialize(profile, MojangUsername.class))
                     .collect(Concurrent.toUnmodifiableList())
             );
         }

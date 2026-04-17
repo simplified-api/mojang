@@ -1,11 +1,12 @@
 package dev.sbs.minecraftapi.client.mojang.request;
 
+import com.google.gson.Gson;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
-import dev.sbs.minecraftapi.MinecraftApi;
 import dev.sbs.minecraftapi.client.mojang.response.MinecraftPing;
 import dev.sbs.renderer.text.TextSegment;
+import dev.simplified.gson.GsonSettings;
 import dev.simplified.stream.ByteArrayDataOutput;
 import lombok.Cleanup;
 import lombok.SneakyThrows;
@@ -27,6 +28,7 @@ import java.nio.charset.StandardCharsets;
  */
 public final class MinecraftServerPing {
 
+    private static final @NotNull Gson GSON = GsonSettings.defaults().create();
     public static final byte PACKET_HANDSHAKE = 0x00;
     public static final byte PACKET_STATUSREQUEST = 0x00;
     public static final byte PACKET_PING = 0x01;
@@ -139,7 +141,7 @@ public final class MinecraftServerPing {
 
         }
 
-        MinecraftPing output = MinecraftApi.getGson().fromJson(jsonObject, MinecraftPing.class);
+        MinecraftPing output = GSON.fromJson(jsonObject, MinecraftPing.class);
         output.setPing(ping);
 
         return output;

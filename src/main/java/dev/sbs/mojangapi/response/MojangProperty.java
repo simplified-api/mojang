@@ -1,7 +1,8 @@
 package dev.sbs.minecraftapi.client.mojang.response;
 
+import com.google.gson.Gson;
 import com.google.gson.annotations.SerializedName;
-import dev.sbs.minecraftapi.MinecraftApi;
+import dev.simplified.gson.GsonSettings;
 import dev.simplified.gson.SerializedPath;
 import dev.simplified.persistence.type.GsonType;
 import dev.simplified.util.StringUtil;
@@ -20,6 +21,7 @@ import java.util.UUID;
 @NoArgsConstructor(access = AccessLevel.NONE)
 public class MojangProperty {
 
+    private static final @NotNull Gson GSON = GsonSettings.defaults().create();
     private String name = "textures";
     @SerializedName("value")
     private String raw = "";
@@ -30,7 +32,7 @@ public class MojangProperty {
     }
 
     public @NotNull Value getValue() {
-        return MinecraftApi.getGson().fromJson(this.getRawJson(), Value.class);
+        return GSON.fromJson(this.getRawJson(), Value.class);
     }
 
     @Getter
