@@ -1,6 +1,8 @@
-package dev.sbs.minecraftapi.client.mojang.request;
+package dev.sbs.minecraftapi.client.mojang;
 
 import dev.sbs.minecraftapi.client.mojang.exception.MojangApiException;
+import dev.sbs.minecraftapi.client.mojang.request.MojangDomain;
+import dev.sbs.minecraftapi.client.mojang.request.MojangRoute;
 import dev.sbs.minecraftapi.client.mojang.response.MojangMultiUsername;
 import dev.sbs.minecraftapi.client.mojang.response.MojangProfile;
 import dev.sbs.minecraftapi.client.mojang.response.MojangProperties;

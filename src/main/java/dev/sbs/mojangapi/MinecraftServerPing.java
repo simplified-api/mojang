@@ -1,4 +1,4 @@
-package dev.sbs.minecraftapi.client.mojang.request;
+package dev.sbs.minecraftapi.client.mojang;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonElement;
