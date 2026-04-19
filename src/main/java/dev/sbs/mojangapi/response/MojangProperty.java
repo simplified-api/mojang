@@ -4,7 +4,6 @@ import com.google.gson.Gson;
 import com.google.gson.annotations.SerializedName;
 import dev.simplified.gson.GsonSettings;
 import dev.simplified.gson.SerializedPath;
-import dev.simplified.persistence.type.GsonType;
 import dev.simplified.util.StringUtil;
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -17,7 +16,6 @@ import java.util.Optional;
 import java.util.UUID;
 
 @Getter
-@GsonType
 @NoArgsConstructor(access = AccessLevel.NONE)
 public class MojangProperty {
 
