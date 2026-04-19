@@ -1,10 +1,10 @@
-package dev.sbs.minecraftapi.client.mojang;
+package dev.sbs.mojangapi;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
-import dev.sbs.minecraftapi.client.mojang.response.MinecraftPing;
+import dev.sbs.mojangapi.response.MinecraftPing;
 import lib.minecraft.text.TextSegment;
 import dev.simplified.gson.GsonSettings;
 import dev.simplified.stream.ByteArrayDataOutput;

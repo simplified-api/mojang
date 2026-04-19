@@ -1,4 +1,4 @@
-package dev.sbs.minecraftapi.client.mojang.response;
+package dev.sbs.mojangapi.response;
 
 import dev.simplified.util.RegexUtil;
 import lombok.Getter;

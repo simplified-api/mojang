@@ -1,4 +1,4 @@
-package dev.sbs.minecraftapi.client.mojang.response;
+package dev.sbs.mojangapi.response;
 
 import com.google.gson.annotations.SerializedName;
 import dev.simplified.collection.Concurrent;

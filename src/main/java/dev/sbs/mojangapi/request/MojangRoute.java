@@ -1,4 +1,4 @@
-package dev.sbs.minecraftapi.client.mojang.request;
+package dev.sbs.mojangapi.request;
 
 import dev.simplified.client.route.DynamicRoute;
 import org.jetbrains.annotations.NotNull;

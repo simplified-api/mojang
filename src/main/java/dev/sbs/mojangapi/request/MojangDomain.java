@@ -1,4 +1,4 @@
-package dev.sbs.minecraftapi.client.mojang.request;
+package dev.sbs.mojangapi.request;
 
 import dev.simplified.client.ratelimit.RateLimit;
 import dev.simplified.client.route.DynamicRouteProvider;

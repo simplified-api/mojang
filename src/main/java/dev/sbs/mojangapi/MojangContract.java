@@ -1,15 +1,15 @@
-package dev.sbs.minecraftapi.client.mojang;
+package dev.sbs.mojangapi;
 
-import dev.sbs.minecraftapi.client.mojang.exception.MojangApiException;
-import dev.sbs.minecraftapi.client.mojang.request.MojangDomain;
-import dev.sbs.minecraftapi.client.mojang.request.MojangRoute;
-import dev.sbs.minecraftapi.client.mojang.response.MojangMultiUsername;
-import dev.sbs.minecraftapi.client.mojang.response.MojangProfile;
-import dev.sbs.minecraftapi.client.mojang.response.MojangProperties;
-import dev.sbs.minecraftapi.client.mojang.response.MojangUsername;
-import dev.sbs.minecraftapi.client.mojang.response.PistonAssets;
-import dev.sbs.minecraftapi.client.mojang.response.PistonManifest;
-import dev.sbs.minecraftapi.client.mojang.response.PistonMetadata;
+import dev.sbs.mojangapi.exception.MojangApiException;
+import dev.sbs.mojangapi.request.MojangDomain;
+import dev.sbs.mojangapi.request.MojangRoute;
+import dev.sbs.mojangapi.response.MojangMultiUsername;
+import dev.sbs.mojangapi.response.MojangProfile;
+import dev.sbs.mojangapi.response.MojangProperties;
+import dev.sbs.mojangapi.response.MojangUsername;
+import dev.sbs.mojangapi.response.PistonAssets;
+import dev.sbs.mojangapi.response.PistonManifest;
+import dev.sbs.mojangapi.response.PistonMetadata;
 import dev.simplified.client.request.Contract;
 import dev.simplified.client.request.expander.StringArrayQuoteExpander;
 import feign.Body;

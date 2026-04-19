@@ -1,4 +1,4 @@
-package dev.sbs.minecraftapi.client.mojang.response;
+package dev.sbs.mojangapi.response;
 
 import com.google.gson.JsonDeserializationContext;
 import com.google.gson.JsonDeserializer;

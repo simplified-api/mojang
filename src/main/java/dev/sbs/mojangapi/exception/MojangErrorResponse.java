@@ -1,4 +1,4 @@
-package dev.sbs.minecraftapi.client.mojang.exception;
+package dev.sbs.mojangapi.exception;
 
 import com.google.gson.annotations.SerializedName;
 import dev.simplified.client.exception.ApiErrorResponse;
