@@ -1,1 +1,1 @@
-rootProject.name = "mojang-api"
+rootProject.name = "mojang"
