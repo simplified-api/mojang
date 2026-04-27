@@ -229,6 +229,24 @@ public interface MojangContract extends Contract {
     }
 
     /**
+     * Streams a player skin or cape texture from {@code textures.minecraft.net}.
+     * <p>
+     * The hash is the trailing path segment of the texture URL Mojang's session API returns in
+     * the {@link MojangProperties} payload, e.g. for {@code http://textures.minecraft.net/texture/abc123...}
+     * the hash is {@code abc123...}.
+     * <p>
+     * The caller owns the returned stream's lifecycle and <b>must</b> close it (e.g. via
+     * try-with-resources) to release the underlying HTTP connection back to the pool.
+     *
+     * @param hash the texture hash
+     * @return a streaming input stream of the PNG body
+     * @throws MojangApiException if the server responds with an HTTP status of 400 or higher
+     */
+    @MojangRoute(MojangDomain.MINECRAFT_TEXTURES)
+    @RequestLine("GET /texture/{hash}")
+    @NotNull InputStream downloadTexture(@NotNull @Param("hash") String hash) throws MojangApiException;
+
+    /**
      * Downloads an individual Minecraft asset as a byte array from the
      * resource CDN ({@code resources.download.minecraft.net}).
      *
