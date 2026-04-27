@@ -1,13 +1,13 @@
-package dev.sbs.mojangapi;
+package api.simplified.mojang;
 
+import api.simplified.mojang.response.MinecraftPing;
 import com.google.gson.Gson;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
-import dev.sbs.mojangapi.response.MinecraftPing;
-import lib.minecraft.text.TextSegment;
 import dev.simplified.gson.GsonSettings;
 import dev.simplified.stream.ByteArrayDataOutput;
+import lib.minecraft.text.TextSegment;
 import lombok.Cleanup;
 import lombok.SneakyThrows;
 import org.jetbrains.annotations.NotNull;

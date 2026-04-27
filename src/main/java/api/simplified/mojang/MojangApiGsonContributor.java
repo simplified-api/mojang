@@ -1,6 +1,6 @@
-package dev.sbs.mojangapi;
+package api.simplified.mojang;
 
-import dev.sbs.mojangapi.response.MojangMultiUsername;
+import api.simplified.mojang.response.MojangMultiUsername;
 import dev.simplified.gson.GsonContributor;
 import dev.simplified.gson.GsonSettings;
 import org.jetbrains.annotations.NotNull;

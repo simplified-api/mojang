@@ -1,4 +1,4 @@
-package dev.sbs.mojangapi.request;
+package api.simplified.mojang.request;
 
 import dev.simplified.client.route.DynamicRoute;
 import org.jetbrains.annotations.NotNull;

@@ -1,4 +1,4 @@
-package dev.sbs.mojangapi.exception;
+package api.simplified.mojang.exception;
 
 import com.google.gson.annotations.SerializedName;
 import dev.simplified.client.exception.ApiErrorResponse;

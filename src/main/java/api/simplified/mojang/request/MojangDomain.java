@@ -1,4 +1,4 @@
-package dev.sbs.mojangapi.request;
+package api.simplified.mojang.request;
 
 import dev.simplified.client.ratelimit.RateLimit;
 import dev.simplified.client.route.DynamicRouteProvider;

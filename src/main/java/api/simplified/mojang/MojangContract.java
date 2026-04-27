@@ -1,15 +1,15 @@
-package dev.sbs.mojangapi;
+package api.simplified.mojang;
 
-import dev.sbs.mojangapi.exception.MojangApiException;
-import dev.sbs.mojangapi.request.MojangDomain;
-import dev.sbs.mojangapi.request.MojangRoute;
-import dev.sbs.mojangapi.response.MojangMultiUsername;
-import dev.sbs.mojangapi.response.MojangProfile;
-import dev.sbs.mojangapi.response.MojangProperties;
-import dev.sbs.mojangapi.response.MojangUsername;
-import dev.sbs.mojangapi.response.PistonAssets;
-import dev.sbs.mojangapi.response.PistonManifest;
-import dev.sbs.mojangapi.response.PistonMetadata;
+import api.simplified.mojang.exception.MojangApiException;
+import api.simplified.mojang.request.MojangDomain;
+import api.simplified.mojang.request.MojangRoute;
+import api.simplified.mojang.response.MojangMultiUsername;
+import api.simplified.mojang.response.MojangProfile;
+import api.simplified.mojang.response.MojangProperties;
+import api.simplified.mojang.response.MojangUsername;
+import api.simplified.mojang.response.PistonAssets;
+import api.simplified.mojang.response.PistonManifest;
+import api.simplified.mojang.response.PistonMetadata;
 import dev.simplified.client.request.Contract;
 import dev.simplified.client.request.expander.StringArrayQuoteExpander;
 import feign.Body;

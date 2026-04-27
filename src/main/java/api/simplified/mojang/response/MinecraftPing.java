@@ -1,4 +1,4 @@
-package dev.sbs.mojangapi.response;
+package api.simplified.mojang.response;
 
 import dev.simplified.util.RegexUtil;
 import lombok.Getter;

@@ -1,4 +1,4 @@
-package dev.sbs.mojangapi.response;
+package api.simplified.mojang.response;
 
 import com.google.gson.annotations.SerializedName;
 import lombok.Getter;

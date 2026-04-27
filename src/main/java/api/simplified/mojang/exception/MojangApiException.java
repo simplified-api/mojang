@@ -1,4 +1,4 @@
-package dev.sbs.mojangapi.exception;
+package api.simplified.mojang.exception;
 
 import com.google.gson.Gson;
 import dev.simplified.client.exception.JsonApiException;
