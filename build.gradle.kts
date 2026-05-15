@@ -35,11 +35,11 @@ dependencies {
     testImplementation(libs.junit.platform.launcher)
 
     // Simplified Libraries (github.com/simplified-dev)
-    api("com.github.simplified-dev:collections") { version { strictly("a5f41e0") } }
-    api("com.github.simplified-dev:utils") { version { strictly("5c6c96a") } }
-    api("com.github.simplified-dev:reflection") { version { strictly("ed2e17c") } }
-    api("com.github.simplified-dev:gson-extras") { version { strictly("c1b9a84") } }
-    api("com.github.simplified-dev:client") { version { strictly("8435d8d") } }
+    api("com.github.simplified-dev:collections") { version { strictly("6586657") } }
+    api("com.github.simplified-dev:utils") { version { strictly("ca4cbca") } }
+    api("com.github.simplified-dev:reflection") { version { strictly("746e607") } }
+    api("com.github.simplified-dev:gson-extras") { version { strictly("35d2257") } }
+    api("com.github.simplified-dev:client") { version { strictly("6a11168") } }
 
     // Minecraft-Library (github.com/minecraft-library)
     // MinecraftServerPing parses legacy TextSegment MOTDs.
