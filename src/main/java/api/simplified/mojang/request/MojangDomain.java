@@ -2,6 +2,7 @@ package api.simplified.mojang.request;
 
 import dev.simplified.client.ratelimit.RateLimit;
 import dev.simplified.client.route.DynamicRouteProvider;
+import dev.simplified.client.route.RouteDiscovery;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.jetbrains.annotations.NotNull;
@@ -13,7 +14,7 @@ import java.time.temporal.ChronoUnit;
  * <p>
  * Each constant supplies its host (and optional base path) along with its rate-limit policy
  * for client-side throttling. Domains are addressed at runtime through the {@link MojangRoute}
- * annotation, which {@link dev.simplified.client.route.RouteDiscovery RouteDiscovery} resolves
+ * annotation, which {@link RouteDiscovery RouteDiscovery} resolves
  * via the {@link DynamicRouteProvider} contract.
  * <p>
  * The default global rate limit is 600 requests per 10 minutes per IP address; the session

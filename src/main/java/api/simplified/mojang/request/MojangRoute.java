@@ -1,6 +1,8 @@
 package api.simplified.mojang.request;
 
 import dev.simplified.client.route.DynamicRoute;
+import dev.simplified.client.route.DynamicRouteProvider;
+import dev.simplified.client.route.RouteDiscovery;
 import org.jetbrains.annotations.NotNull;
 
 import java.lang.annotation.ElementType;
@@ -13,9 +15,9 @@ import java.lang.annotation.Target;
  * request is routed to.
  * <p>
  * Resolved at construction time by
- * {@link dev.simplified.client.route.RouteDiscovery RouteDiscovery} via its {@link DynamicRoute}
+ * {@link RouteDiscovery RouteDiscovery} via its {@link DynamicRoute}
  * meta-annotation. The {@code value()} method returns a {@link MojangDomain}, which implements
- * {@link dev.simplified.client.route.DynamicRouteProvider DynamicRouteProvider} and supplies the
+ * {@link DynamicRouteProvider DynamicRouteProvider} and supplies the
  * host and rate-limit policy for the matched route.
  *
  * @see MojangDomain

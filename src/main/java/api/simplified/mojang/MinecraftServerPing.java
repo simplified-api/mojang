@@ -39,7 +39,7 @@ public final class MinecraftServerPing {
      * Fetches a {@link MinecraftPing} for the supplied hostname.
      * <b>Assumed timeout of 2s and port of 25565.</b>
      *
-     * @param hostname Minecraft server hostname.
+     * @param hostname Minecraft server hostname
      * @return {@link MinecraftPing}
      */
     public @NotNull MinecraftPing pingServer(final String hostname) {
@@ -50,8 +50,8 @@ public final class MinecraftServerPing {
      * Fetches a {@link MinecraftPing} for the supplied hostname.
      * <b>Assumed timeout of 2s and port of 25565.</b>
      *
-     * @param hostname Minecraft server hostname.
-     * @param port Minecraft server port.
+     * @param hostname Minecraft server hostname
+     * @param port Minecraft server port
      * @return {@link MinecraftPing}
      */
     public @NotNull MinecraftPing pingServer(final String hostname, int port) {
@@ -61,9 +61,9 @@ public final class MinecraftServerPing {
     /**
      * Fetches a {@link MinecraftPing} for the supplied options.
      *
-     * @param hostname Minecraft server hostname.
-     * @param port Minecraft server port.
-     * @param timeout Timeout in milliseconds for the connection to complete.
+     * @param hostname Minecraft server hostname
+     * @param port Minecraft server port
+     * @param timeout Timeout in milliseconds for the connection to complete
      * @return {@link MinecraftPing}
      */
     @SneakyThrows

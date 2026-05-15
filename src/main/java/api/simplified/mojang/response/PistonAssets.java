@@ -17,7 +17,9 @@ import org.jetbrains.annotations.NotNull;
 @Getter
 public final class PistonAssets {
 
-    /** The map of asset paths to their download entries. */
+    /**
+     * The map of asset paths to their download entries.
+     */
     @SerializedName("objects")
     private @NotNull ConcurrentMap<String, Entry> objects = Concurrent.newMap();
 
@@ -27,11 +29,15 @@ public final class PistonAssets {
     @Getter
     public static final class Entry {
 
-        /** The SHA-1 hash of the asset, also used to construct the download URL. */
+        /**
+         * The SHA-1 hash of the asset, also used to construct the download URL.
+         */
         @SerializedName("hash")
         private @NotNull String hash;
 
-        /** The size of the asset in bytes. */
+        /**
+         * The size of the asset in bytes.
+         */
         @SerializedName("size")
         private long size;
 

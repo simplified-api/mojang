@@ -18,11 +18,15 @@ import java.time.OffsetDateTime;
 @Getter
 public final class PistonManifest {
 
-    /** The latest release and snapshot version identifiers. */
+    /**
+     * The latest release and snapshot version identifiers.
+     */
     @SerializedName("latest")
     private @NotNull Latest latest = new Latest();
 
-    /** All known version entries, ordered newest first. */
+    /**
+     * All known version entries, ordered newest first.
+     */
     @SerializedName("versions")
     private @NotNull ConcurrentList<Entry> versions = Concurrent.newList();
 
@@ -32,11 +36,15 @@ public final class PistonManifest {
     @Getter
     public static final class Latest {
 
-        /** The latest stable release version identifier (e.g. {@code "1.21.10"}). */
+        /**
+         * The latest stable release version identifier (e.g. {@code "1.21.10"}).
+         */
         @SerializedName("release")
         private @NotNull String release;
 
-        /** The latest snapshot version identifier (e.g. {@code "25w24a"}). */
+        /**
+         * The latest snapshot version identifier (e.g. {@code "25w24a"}).
+         */
         @SerializedName("snapshot")
         private @NotNull String snapshot;
 
@@ -48,31 +56,45 @@ public final class PistonManifest {
     @Getter
     public static final class Entry {
 
-        /** The version identifier (e.g. {@code "1.21.5"}, {@code "25w14craftmine"}). */
+        /**
+         * The version identifier (e.g. {@code "1.21.5"}, {@code "25w14craftmine"}).
+         */
         @SerializedName("id")
         private @NotNull String version;
 
-        /** The version type ({@code "release"} or {@code "snapshot"}). */
+        /**
+         * The version type ({@code "release"} or {@code "snapshot"}).
+         */
         @SerializedName("type")
         private @NotNull String type;
 
-        /** The URL to the {@link PistonMetadata} JSON for this version. */
+        /**
+         * The URL to the {@link PistonMetadata} JSON for this version.
+         */
         @SerializedName("url")
         private @NotNull String url;
 
-        /** The timestamp when this version entry was last updated in {@code ISO-8601} standard. */
+        /**
+         * The timestamp when this version entry was last updated in {@code ISO-8601} standard.
+         */
         @SerializedName("time")
         private @NotNull OffsetDateTime time;
 
-        /** The timestamp when this version was originally released in {@code ISO-8601} standard. */
+        /**
+         * The timestamp when this version was originally released in {@code ISO-8601} standard.
+         */
         @SerializedName("releaseTime")
         private @NotNull OffsetDateTime releaseTime;
 
-        /** The SHA-1 hash of the version metadata JSON. */
+        /**
+         * The SHA-1 hash of the version metadata JSON.
+         */
         @SerializedName("sha1")
         private @NotNull String sha1;
 
-        /** The compliance level for this version. */
+        /**
+         * The compliance level for this version.
+         */
         @SerializedName("complianceLevel")
         private int complianceLevel;
 
