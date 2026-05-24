@@ -6,7 +6,7 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import dev.simplified.gson.GsonSettings;
-import dev.simplified.stream.ByteArrayDataOutput;
+import dev.simplified.util.io.ByteArrayDataOutput;
 import lib.minecraft.text.TextSegment;
 import lombok.Cleanup;
 import lombok.SneakyThrows;
