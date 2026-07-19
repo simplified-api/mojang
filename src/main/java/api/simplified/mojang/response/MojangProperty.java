@@ -3,7 +3,7 @@ package api.simplified.mojang.response;
 import com.google.gson.Gson;
 import com.google.gson.annotations.SerializedName;
 import dev.simplified.gson.GsonSettings;
-import dev.simplified.gson.SerializedPath;
+import dev.simplified.gson.annotation.SerializedPath;
 import dev.simplified.util.StringUtil;
 import lombok.AccessLevel;
 import lombok.Getter;
