@@ -35,15 +35,15 @@ dependencies {
     testImplementation(libs.junit.platform.launcher)
 
     // Simplified Libraries (github.com/simplified-dev)
-    api("com.github.simplified-dev:collections") { version { strictly("2f2aa58") } }
-    api("com.github.simplified-dev:utils") { version { strictly("37dc4a8") } }
-    api("com.github.simplified-dev:reflection") { version { strictly("b2cf834") } }
-    api("com.github.simplified-dev:gson-extras") { version { strictly("37a2c2f") } }
-    api("com.github.simplified-dev:client") { version { strictly("5a5d32e") } }
+    api("com.github.simplified-dev:collections") { version { strictly("652c22d") } }
+    api("com.github.simplified-dev:utils") { version { strictly("7c2feb7") } }
+    api("com.github.simplified-dev:reflection") { version { strictly("7a28c3a") } }
+    api("com.github.simplified-dev:gson-extras") { version { strictly("2ba8143") } }
+    api("com.github.simplified-dev:client") { version { strictly("3d87a03") } }
 
     // Minecraft-Library (github.com/minecraft-library)
     // MinecraftServerPing parses legacy TextSegment MOTDs.
-    api("com.github.minecraft-library:text") { version { strictly("2a75527") } }
+    api("com.github.minecraft-library:text") { version { strictly("117775e") } }
 
     // Gson - @SerializedName, custom JsonDeserializer, and GsonSettings in MinecraftServerPing
     api(libs.gson)
