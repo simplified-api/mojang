@@ -17,11 +17,13 @@ import java.time.temporal.ChronoUnit;
  * annotation, which {@link RouteDiscovery RouteDiscovery} resolves
  * via the {@link DynamicRouteProvider} contract.
  * <p>
- * The default global rate limit is 600 requests per 10 minutes per IP address; the session
- * server is bucketed separately at 200 requests per minute. Other domains inherit the default.
+ * The default global rate limit is 200 requests per 2 minutes per IP address, bucketed by
+ * {@code /56} subnet for IPv6. The session server profile endpoint is bucketed separately at
+ * roughly 400 requests per 10 seconds. Other domains inherit the default.
  *
  * @see MojangRoute
  * @see DynamicRouteProvider
+ * @see <a href="https://minecraft.wiki/w/Mojang_API">Mojang API</a>
  */
 @Getter
 @RequiredArgsConstructor
@@ -34,7 +36,7 @@ public enum MojangDomain implements DynamicRouteProvider {
     MOJANG_AUTHSERVER("authserver.mojang.com"),
     MOJANG_SESSIONSERVER(
         "sessionserver.mojang.com",
-        new RateLimit(200, 1, ChronoUnit.MINUTES)
+        new RateLimit(400, 10, ChronoUnit.SECONDS)
     ),
     MINECRAFT("minecraft.net"),
     MINECRAFT_RESOURCES("resources.download.minecraft.net"),
@@ -49,7 +51,7 @@ public enum MojangDomain implements DynamicRouteProvider {
     private final @NotNull RateLimit rateLimit;
 
     MojangDomain(@NotNull String route) {
-        this(route, new RateLimit(600, 10, ChronoUnit.MINUTES));
+        this(route, new RateLimit(200, 2, ChronoUnit.MINUTES));
     }
 
 }
