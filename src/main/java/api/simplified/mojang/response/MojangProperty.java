@@ -56,7 +56,10 @@ public class MojangProperty {
         }
 
         public boolean isDefaultSlim() {
-            return this.getUniqueId().hashCode() % 2 == 1;
+            // Vanilla tests the low bit of the hash. A remainder test reads as the same thing and
+            // is not: Java's % keeps the sign of the dividend, so every negative hash answers -1
+            // and no profile whose uuid hashes negative could ever take the slim default.
+            return (this.getUniqueId().hashCode() & 1) == 1;
         }
 
     }
