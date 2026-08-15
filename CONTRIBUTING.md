@@ -67,7 +67,7 @@ No credentials are needed. Every endpoint declared here is public, which is also
 
 1. Open the project root (the directory containing `settings.gradle.kts`). IntelliJ auto-imports the Gradle build.
 2. Ensure the **Project SDK** under **File > Project Structure** is set to a JDK 21 installation.
-3. Enable **annotation processing** - Lombok generates every accessor in `response/`, and the IDE reports phantom errors until the processor runs.
+3. Enable **annotation processing** - the annotation processor generates every accessor in `response/`, and the IDE reports phantom errors until the processor runs.
 4. The build script excludes `.schema/` from the IDE module.
 
 ## Making Changes
@@ -83,7 +83,7 @@ git checkout -b feat/my-feature master
 
 ### Code Style
 
-The repository uses Lombok for boilerplate reduction and enforces a consistent Javadoc, exception, and control-flow style.
+The repository uses Simplified Annotations for boilerplate reduction and enforces a consistent Javadoc, exception, and control-flow style.
 
 #### Javadoc
 
@@ -92,7 +92,7 @@ The repository uses Lombok for boilerplate reduction and enforces a consistent J
 - **Tags** - Always include `@param`, `@return`, `@throws` where applicable. Lowercase sentence fragments, no trailing period. Single space after the parameter name - never column-align.
 - **Cross-references** - Use `{@link}` / `{@linkplain}` / `@see`. Use `{@code}` for inline code. Import link targets so they render with short names.
 - **Overrides** - Use `/** {@inheritDoc} */` for methods that override library/framework types. Do not rewrite the parent doc.
-- **Field getters** - Field-like interface methods (no params, non-void return) use a noun-phrase fragment without `@return` and without "Gets"/"Returns". Lombok `@Getter` implementations carry their doc on the field, not a separate method Javadoc block.
+- **Field getters** - Field-like interface methods (no params, non-void return) use a noun-phrase fragment without `@return` and without "Gets"/"Returns". A `@Getter` field carries its doc on the field, not a separate method Javadoc block.
 - **Structure** - `<p>` on its own line between paragraphs; `<ul>` / `<li>` for lists; `<b>` for emphasis inside list items.
 - **Forbidden tags** - Never use `@author` or `@since`.
 - **Link a live example** - the Piston DTOs carry an `@see` pointing at a real manifest or package URL. Keep that up when the shape changes; it is the fastest way for the next reader to check a field against the wire.
