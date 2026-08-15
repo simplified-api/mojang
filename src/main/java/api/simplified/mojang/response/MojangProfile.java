@@ -1,12 +1,12 @@
 package api.simplified.mojang.response;
 
+import dev.simplified.annotations.AllArgsConstructor;
+import dev.simplified.annotations.Getter;
+import dev.simplified.annotations.NoArgsConstructor;
+import dev.simplified.annotations.SilentThrows;
 import dev.simplified.collection.Concurrent;
 import dev.simplified.collection.ConcurrentList;
 import dev.simplified.util.StringUtil;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.SneakyThrows;
 import org.jetbrains.annotations.NotNull;
 
 import javax.imageio.ImageIO;
@@ -52,7 +52,7 @@ public class MojangProfile {
         private Optional<Value> skin = Optional.empty();
         private Optional<Value> cape = Optional.empty();
 
-        @SneakyThrows
+        @SilentThrows
         public Textures(@NotNull MojangProperties properties) { // Mojang Api
             MojangProperty property = properties.getProperty();
             MojangProperty.Value value = property.getValue();
@@ -71,12 +71,12 @@ public class MojangProfile {
             ));
         }
 
-        @SneakyThrows
+        @SilentThrows
         private static @NotNull BufferedImage getImage(@NotNull String requestUrl) {
             return ImageIO.read(new URL(requestUrl));
         }
 
-        @SneakyThrows
+        @SilentThrows
         private static @NotNull String encodeImage(@NotNull BufferedImage bufferedImage) {
             ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
             ImageIO.write(bufferedImage, "PNG", outputStream);
