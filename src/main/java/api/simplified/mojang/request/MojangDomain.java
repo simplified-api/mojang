@@ -1,10 +1,10 @@
 package api.simplified.mojang.request;
 
+import dev.simplified.annotations.Getter;
+import dev.simplified.annotations.RequiredArgsConstructor;
 import dev.simplified.client.ratelimit.RateLimit;
 import dev.simplified.client.route.DynamicRouteProvider;
 import dev.simplified.client.route.RouteDiscovery;
-import lombok.Getter;
-import lombok.RequiredArgsConstructor;
 import org.jetbrains.annotations.NotNull;
 
 import java.time.temporal.ChronoUnit;

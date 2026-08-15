@@ -2,12 +2,10 @@ package api.simplified.mojang.response;
 
 import com.google.gson.Gson;
 import com.google.gson.annotations.SerializedName;
+import dev.simplified.annotations.Getter;
 import dev.simplified.gson.GsonSettings;
 import dev.simplified.gson.annotation.SerializedPath;
 import dev.simplified.util.StringUtil;
-import lombok.AccessLevel;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
 import org.jetbrains.annotations.NotNull;
 
 import java.nio.charset.StandardCharsets;
@@ -16,7 +14,6 @@ import java.util.Optional;
 import java.util.UUID;
 
 @Getter
-@NoArgsConstructor(access = AccessLevel.NONE)
 public class MojangProperty {
 
     private static final @NotNull Gson GSON = GsonSettings.defaults().create();

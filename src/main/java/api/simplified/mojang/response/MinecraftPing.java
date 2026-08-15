@@ -1,9 +1,9 @@
 package api.simplified.mojang.response;
 
+import dev.simplified.annotations.Getter;
+import dev.simplified.annotations.Setter;
+import dev.simplified.annotations.ToString;
 import dev.simplified.util.RegexUtil;
-import lombok.Getter;
-import lombok.Setter;
-import lombok.ToString;
 
 import java.util.List;
 

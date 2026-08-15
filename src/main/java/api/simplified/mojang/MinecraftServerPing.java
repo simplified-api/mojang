@@ -5,11 +5,11 @@ import com.google.gson.Gson;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
+import dev.simplified.annotations.Cleanup;
+import dev.simplified.annotations.SilentThrows;
 import dev.simplified.gson.GsonSettings;
 import dev.simplified.util.io.ByteArrayDataOutput;
 import lib.minecraft.text.TextSegment;
-import lombok.Cleanup;
-import lombok.SneakyThrows;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.DataInput;
@@ -66,7 +66,7 @@ public final class MinecraftServerPing {
      * @param timeout Timeout in milliseconds for the connection to complete
      * @return {@link MinecraftPing}
      */
-    @SneakyThrows
+    @SilentThrows
     public @NotNull MinecraftPing pingServer(@NotNull String hostname, int port, int timeout) {
         @Cleanup Socket socket = new Socket();
         long start = System.currentTimeMillis();
