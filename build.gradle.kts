@@ -36,7 +36,7 @@ dependencies {
     api("com.github.simplified-dev:utils") { version { strictly("92ae878") } }
     api("com.github.simplified-dev:reflection") { version { strictly("5186e88") } }
     api("com.github.simplified-dev:gson-extras") { version { strictly("3ac0d4f") } }
-    api("com.github.simplified-dev:client") { version { strictly("1f1a2ae") } }
+    api("com.github.simplified-dev:client") { version { strictly("daefea3") } }
 
     // Minecraft-Library (github.com/minecraft-library)
     // MinecraftServerPing parses legacy TextSegment MOTDs.
