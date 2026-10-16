@@ -40,7 +40,7 @@ dependencies {
 
     // Minecraft-Library (github.com/minecraft-library)
     // MinecraftServerPing parses legacy TextSegment MOTDs.
-    api("com.github.minecraft-library:text") { version { strictly("ab36b42") } }
+    api("com.github.minecraft-library:text") { version { strictly("59ca7a9") } }
 
     // Gson - @SerializedName, custom JsonDeserializer, and GsonSettings in MinecraftServerPing
     api(libs.gson)
